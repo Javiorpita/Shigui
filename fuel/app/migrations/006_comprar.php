@@ -1,4 +1,4 @@
-    <?php
+<?php
     namespace Fuel\Migrations;
 
     class comprar
