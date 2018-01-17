@@ -62,3 +62,18 @@ ERROR - 2018-01-17 10:36:32 --> Error - Class 'Firebase\JWT\JWT' not found in /v
 WARNING - 2018-01-17 10:41:27 --> Fuel\Core\Fuel::init - The configured locale en_US is not installed on your system.
 ERROR - 2018-01-17 10:41:27 --> Error - Class 'JWT' not found in /var/www/html/Shigui/fuel/app/classes/controller/usuarios.php on line 126
 WARNING - 2018-01-17 11:50:38 --> Fuel\Core\Fuel::init - The configured locale en_US is not installed on your system.
+WARNING - 2018-01-17 12:44:11 --> Fuel\Core\Fuel::init - The configured locale en_US is not installed on your system.
+WARNING - 2018-01-17 12:45:05 --> Fuel\Core\Fuel::init - The configured locale en_US is not installed on your system.
+WARNING - 2018-01-17 12:49:54 --> Fuel\Core\Fuel::init - The configured locale en_US is not installed on your system.
+WARNING - 2018-01-17 13:15:56 --> Fuel\Core\Fuel::init - The configured locale en_US is not installed on your system.
+WARNING - 2018-01-17 13:22:05 --> Fuel\Core\Fuel::init - The configured locale en_US is not installed on your system.
+WARNING - 2018-01-17 13:22:32 --> Fuel\Core\Fuel::init - The configured locale en_US is not installed on your system.
+WARNING - 2018-01-17 13:23:45 --> Fuel\Core\Fuel::init - The configured locale en_US is not installed on your system.
+WARNING - 2018-01-17 13:25:37 --> Fuel\Core\Fuel::init - The configured locale en_US is not installed on your system.
+WARNING - 2018-01-17 13:27:18 --> Fuel\Core\Fuel::init - The configured locale en_US is not installed on your system.
+WARNING - 2018-01-17 13:27:37 --> Fuel\Core\Fuel::init - The configured locale en_US is not installed on your system.
+WARNING - 2018-01-17 13:31:20 --> Fuel\Core\Fuel::init - The configured locale en_US is not installed on your system.
+ERROR - 2018-01-17 13:31:20 --> Error - syntax error, unexpected '}', expecting ')' in /var/www/html/Shigui/fuel/app/classes/controller/usuarios.php on line 34
+WARNING - 2018-01-17 13:31:49 --> Fuel\Core\Fuel::init - The configured locale en_US is not installed on your system.
+WARNING - 2018-01-17 13:32:03 --> Fuel\Core\Fuel::init - The configured locale en_US is not installed on your system.
+WARNING - 2018-01-17 13:32:09 --> Fuel\Core\Fuel::init - The configured locale en_US is not installed on your system.

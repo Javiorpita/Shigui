@@ -27,16 +27,25 @@ class Controller_Usuarios extends Controller_Rest
             $user->password = $input['password'];
             $user->email = $input['email'];
             $user->monedas = 100;
-            $user->save();
-
-            $json = $this->response(array(
-                'code' => 200,
-                'message' => 'Usuario creado correctamente',
-                'data' => ['username' => $input['nombre']]
+            if ($user->nombre == "" || $user->email == "" || $user->password == ""){
+                $json = $this->response(array(
+                'code' => 400,
+                'message' => 'Se necesita introducir todos los parametros'
             ));
+            }
+            else{
+                $user->save();
 
-            return $json;
+                $json = $this->response(array(
+                    'code' => 200,
+                    'message' => 'Usuario creado correctamente',
+                    'data' => ['username' => $input['nombre']]
+                ));
 
+                return $json;
+
+            }
+            
         } 
         catch (Exception $e) 
         {
@@ -54,8 +63,8 @@ class Controller_Usuarios extends Controller_Rest
 
                 $json = $this->response(array(
                 'code' => 500,
-                'message' => $e->getCode()
-                //'message' => $e->getMessage(),
+               // 'message' => $e->getCode()
+                'message' => $e->getMessage(),
             ));
 
             return $json;
