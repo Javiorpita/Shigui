@@ -5,6 +5,9 @@ use \Firebase\JWT\JWT;
 class Controller_Usuarios extends Controller_Rest
 {
     private $key = "juf3dhu3hufdchv3xui3ucxj";
+
+    private $emailcoger = "";
+
                                     //Crear usuario
     public function post_create()
     {
@@ -78,7 +81,16 @@ class Controller_Usuarios extends Controller_Rest
     {
     	$users = Model_Usuarios::find('all');
 
-    	return $this->response(Arr::reindex($users));
+        $json = $this->response(array(
+                'code' => 500,
+                'message' => 'Esta es la lista de usuarios',
+                'data' => $users
+
+        ));
+
+        return $json;
+
+    	//return $this->response(Arr::reindex($users));
 
     }
                                     //Eliminar usuario
@@ -149,7 +161,7 @@ class Controller_Usuarios extends Controller_Rest
         {
             $json = $this->response(array(
                 'code' => 500,
-                'message' => $e->getMessage()
+                'message' => 'Error de servidor'
                 //'message' => $e->getMessage(),
             ));
 
@@ -162,7 +174,11 @@ class Controller_Usuarios extends Controller_Rest
         {
             $change = $_POST;
             $user = new Model_Usuarios();
-            $user = Model_Usuarios::find($_POST['id']);
+            $user = Model_Usuarios::find('first', array(
+                    'where' => array(
+                        array('email', $change['email'])
+                    )
+                ));
 
             $user->password = $change['password'];
 
@@ -176,4 +192,59 @@ class Controller_Usuarios extends Controller_Rest
 
             return $json;
         }
+    public function get_email()
+        {
+
+            try {
+
+                $input = $_GET;
+                $user = Model_Usuarios::find('first', array(
+                    'where' => array(
+                        array('email', $input['email']))
+                ));
+
+                if ( !empty($user))
+                {
+                    foreach ($user as $key => $value)
+                    {
+                        $id = $user[$key]->id;
+                        $email = $user[$key]->email;
+                    }
+
+
+                    if ($email == $input['email'])
+                    {
+                        return $this->response(array(
+                        '   Email verificado' => 220,
+                            ['email' => $email]
+                    ));
+
+                    }
+                }
+                else
+                {
+                    return $this->response(array('Error de Autentificacion' => 401));
+                }
+                
+                
+
+
+                    
+
+                
+               
+            }
+        catch (Exception $e)
+        {
+            $json = $this->response(array(
+                'code' => 500,
+                'message' => 'Error de servidor'
+                //'message' => $e->getMessage(),
+            ));
+
+            return $json;
+
+        }
+
+    }    
 }
