@@ -1,32 +1,32 @@
 <?php
     namespace Fuel\Migrations;
 
-    class comprar
+    class buy
     {
 
         function up()
         {
-            \DBUtil::create_table('comprar',
+            \DBUtil::create_table('buy',
                 array(
-            'id_usuario' => array('constraint' => 11, 'type' => 'int'),
-            'id_objeto' => array('constraint' => 11, 'type' => 'int'),
-        ), array('id_usuario','id_objeto'), false, 'InnoDB', 'utf8_unicode_ci',
+            'id_user' => array('constraint' => 11, 'type' => 'int'),
+            'id_object' => array('constraint' => 11, 'type' => 'int'),
+        ), array('id_user','id_object'), false, 'InnoDB', 'utf8_unicode_ci',
         array(
             array(
-                'constraint' => 'claveAjenaComprarAUsuarios',
-                'key' => 'id_usuario',
+                'constraint' => 'foreingKeyBuyToUsers',
+                'key' => 'id_user',
                 'reference' => array(
-                    'table' => 'usuarios',
+                    'table' => 'users',
                     'column' => 'id',
                 ),
                 'on_update' => 'CASCADE',
                 'on_delete' => 'CASCADE'
             ),
             array(
-                'constraint' => 'claveAjenaObjetos',
-                'key' => 'id_objeto',
+                'constraint' => 'foreingKeyToObjects',
+                'key' => 'id_object',
                 'reference' => array(
-                    'table' => 'objetos',
+                    'table' => 'objects',
                     'column' => 'id',
                 ),
                 'on_update' => 'CASCADE',
@@ -38,6 +38,6 @@
 
         function down()
         {
-           \DBUtil::drop_table('comprar');
+           \DBUtil::drop_table('buy');
         }
     }

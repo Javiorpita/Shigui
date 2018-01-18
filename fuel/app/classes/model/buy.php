@@ -1,19 +1,17 @@
 <?php 
 
-class Model_Buscar extends Orm\Model
+class Model_Buy extends Orm\Model
 {
-    protected static $_table_name = 'buscar';
+    protected static $_table_name = 'buy';
 
-    protected static $_primary_key = array('id_usuario','id_lugar');
+    protected static $_primary_key = array('id_user','id_object');
     protected static $_properties = array(
         'id', // both validation & typing observers will ignore the PK
-        'id_usuario' => array(
+        'id_user' => array(
             'data_type' => 'int'   
         ),
-        'id_lugar' => array(
+        'id_object' => array(
             'data_type' => 'int'   
         )
-
-
     );
 }

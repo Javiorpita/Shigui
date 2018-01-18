@@ -1,25 +1,23 @@
 <?php 
 
-class Model_Usuarios extends Orm\Model
+class Model_Valuations extends Orm\Model
 {
-    protected static $_table_name = 'usuarios';
+    protected static $_table_name = 'valuations';
 
     protected static $_primary_key = array('id');
     protected static $_properties = array(
         'id', // both validation & typing observers will ignore the PK
-        'nombre' => array(
+        'comentary' => array(
             'data_type' => 'varchar'   
         ),
-        'password' => array(
-            'data_type' => 'varchar'   
-        ),
-        'email' => array(
-            'data_type' => 'varchar'   
-        ),
-        'monedas' => array(
+        'value' => array(
             'data_type' => 'int'   
-        )
-
-
+        ),
+        'id_user' => array(
+            'data_type' => 'int'   
+        ),
+         'id_place' => array(
+            'data_type' => 'int'   
+        ),
     );
 }

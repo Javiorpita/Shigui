@@ -1,32 +1,32 @@
 <?php
     namespace Fuel\Migrations;
 
-    class hacerfavorito
+    class search
     {
 
         function up()
         {
-            \DBUtil::create_table('hacerfavorito',
+            \DBUtil::create_table('search',
                 array(
-            'id_usuario' => array('constraint' => 11, 'type' => 'int'),
-            'id_lugar' => array('constraint' => 11, 'type' => 'int'),
-        ), array('id_usuario','id_lugar'), false, 'InnoDB', 'utf8_unicode_ci',
+            'id_user' => array('constraint' => 11, 'type' => 'int'),
+            'id_place' => array('constraint' => 11, 'type' => 'int'),
+        ), array('id_user','id_place'), false, 'InnoDB', 'utf8_unicode_ci',
         array(
             array(
-                'constraint' => 'claveAjenaHacerfavoritoAUsuario',
-                'key' => 'id_usuario',
+                'constraint' => 'foreingKeySearchToUsers',
+                'key' => 'id_user',
                 'reference' => array(
-                    'table' => 'usuarios',
+                    'table' => 'users',
                     'column' => 'id',
                 ),
                 'on_update' => 'CASCADE',
                 'on_delete' => 'CASCADE'
             ),
             array(
-                'constraint' => 'claveAjenaHacerfavoritoALugar',
-                'key' => 'id_lugar',
+                'constraint' => 'foreingKeySearchToPlaces',
+                'key' => 'id_place',
                 'reference' => array(
-                    'table' => 'lugares',
+                    'table' => 'places',
                     'column' => 'id',
                 ),
                 'on_update' => 'CASCADE',
@@ -38,6 +38,6 @@
 
         function down()
         {
-           \DBUtil::drop_table('hacerfavorito');
+           \DBUtil::drop_table('search');
         }
     }

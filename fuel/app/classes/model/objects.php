@@ -1,16 +1,16 @@
 <?php 
 
-class Model_Objetos extends Orm\Model
+class Model_Objects extends Orm\Model
 {
-    protected static $_table_name = 'objetos';
+    protected static $_table_name = 'objects';
 
     protected static $_primary_key = array('id');
     protected static $_properties = array(
         'id', // both validation & typing observers will ignore the PK
-        'descrpcion' => array(
+        'description' => array(
             'data_type' => 'varchar'   
         ),
-        'precio' => array(
+        'price' => array(
             'data_type' => 'int'   
         )
 

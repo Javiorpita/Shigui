@@ -1,32 +1,32 @@
 <?php
     namespace Fuel\Migrations;
 
-    class buscar
+    class favorite
     {
 
         function up()
         {
-            \DBUtil::create_table('buscar',
+            \DBUtil::create_table('favorite',
                 array(
-            'id_usuario' => array('constraint' => 11, 'type' => 'int'),
-            'id_lugar' => array('constraint' => 11, 'type' => 'int'),
-        ), array('id_usuario','id_lugar'), false, 'InnoDB', 'utf8_unicode_ci',
+            'id_user' => array('constraint' => 11, 'type' => 'int'),
+            'id_place' => array('constraint' => 11, 'type' => 'int'),
+        ), array('id_user','id_place'), false, 'InnoDB', 'utf8_unicode_ci',
         array(
             array(
-                'constraint' => 'claveAjenaBuscanAUsuarios',
-                'key' => 'id_usuario',
+                'constraint' => 'foreingKeyFavoriteAUsers',
+                'key' => 'id_user',
                 'reference' => array(
-                    'table' => 'usuarios',
+                    'table' => 'users',
                     'column' => 'id',
                 ),
                 'on_update' => 'CASCADE',
                 'on_delete' => 'CASCADE'
             ),
             array(
-                'constraint' => 'claveAjenaBuscanALugares',
-                'key' => 'id_lugar',
+                'constraint' => 'foreingKeyFavoriteAPlaces',
+                'key' => 'id_place',
                 'reference' => array(
-                    'table' => 'lugares',
+                    'table' => 'places',
                     'column' => 'id',
                 ),
                 'on_update' => 'CASCADE',
@@ -38,6 +38,6 @@
 
         function down()
         {
-           \DBUtil::drop_table('buscar');
+           \DBUtil::drop_table('favorite');
         }
     }

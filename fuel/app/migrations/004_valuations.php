@@ -1,24 +1,24 @@
 <?php
 namespace Fuel\Migrations;
 
-class valoraciones
+class valuations
 {
 
     function up()
     {
-        \DBUtil::create_table('valoraciones',array(
+        \DBUtil::create_table('valuations',array(
         'id' => array('constraint' => 11, 'type' => 'int', 'auto_increment' => true),
-        'comentario' => array('constraint' => 50, 'type' => 'varchar'),
-        'valor' => array('constraint' => 11, 'type' => 'int'),
-        'id_usuario' => array('constraint' => 11, 'type' => 'int'),
-        'id_lugar' => array('constraint' => 11, 'type' => 'int'),
+        'comentary' => array('constraint' => 50, 'type' => 'varchar'),
+        'value' => array('constraint' => 11, 'type' => 'int'),
+        'id_users' => array('constraint' => 11, 'type' => 'int'),
+        'id_places' => array('constraint' => 11, 'type' => 'int'),
     ), array('id'), false, 'InnoDB', 'utf8_unicode_ci',
     array(
         array(
-            'constraint' => 'claveAjenaUsuarios',
-            'key' => 'id_usuario',
+            'constraint' => 'foreingKeyusers',
+            'key' => 'id_users',
             'reference' => array(
-                'table' => 'usuarios',
+                'table' => 'users',
                 'column' => 'id',
             ),
             'on_update' => 'CASCADE',
@@ -26,10 +26,10 @@ class valoraciones
             
         ), 
         array(
-                'constraint' => 'claveAjenaLugar',
-                'key' => 'id_lugar',
+                'constraint' => 'foreingKeyplaces',
+                'key' => 'id_places',
                 'reference' => array(
-                    'table' => 'lugares',
+                    'table' => 'places',
                     'column' => 'id',
                 ),
                 'on_update' => 'CASCADE',
@@ -42,6 +42,6 @@ class valoraciones
 
     function down()
     {
-       \DBUtil::drop_table('valoraciones');
+       \DBUtil::drop_table('valuations');
     }
 }

@@ -1,22 +1,22 @@
 <?php 
 
-class Model_Lugares extends Orm\Model
+class Model_Places extends Orm\Model
 {
-    protected static $_table_name = 'lugares';
+    protected static $_table_name = 'places';
 
     protected static $_primary_key = array('id');
     protected static $_properties = array(
         'id', // both validation & typing observers will ignore the PK
-        'monedas' => array(
+        'coins' => array(
             'data_type' => 'int'   
         ),
-         'coordenadas_X' => array(
+         'coordinates_X' => array(
             'data_type' => 'double'   
         ),
-          'coordenadas_Y' => array(
+          'coordinates_Y' => array(
             'data_type' => 'double'   
         ),
-          'nombre' => array(
+          'name' => array(
             'data_type' => 'varchar'   
         )  
     );

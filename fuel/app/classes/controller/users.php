@@ -2,17 +2,17 @@
 
 use \Firebase\JWT\JWT;
 
-class Controller_Usuarios extends Controller_Rest
+class Controller_Users extends Controller_Rest
 {
     private $key = "juf3dhu3hufdchv3xui3ucxj";
 
-    private $emailcoger = "";
+    private $getEmail = "";
 
                                     //Crear usuario
     public function post_create()
     {
         try {
-            if ( ! isset($_POST['nombre']) && ! isset($_POST['password'])) 
+            if ( ! isset($_POST['name']) && ! isset($_POST['password'])) 
             {
                 $json = $this->response(array(
                     'code' => 400,
@@ -26,11 +26,11 @@ class Controller_Usuarios extends Controller_Rest
 
             $input = $_POST;
             $user = new Model_Usuarios();
-            $user->nombre = $input['nombre'];
+            $user->name = $input['name'];
             $user->password = $input['password'];
             $user->email = $input['email'];
-            $user->monedas = 100;
-            if ($user->nombre == "" || $user->email == "" || $user->password == ""){
+            $user->coins = 100;
+            if ($user->name == "" || $user->email == "" || $user->password == ""){
                 $json = $this->response(array(
                 'code' => 400,
                 'message' => 'Se necesita introducir todos los parametros'
@@ -42,7 +42,7 @@ class Controller_Usuarios extends Controller_Rest
                 $json = $this->response(array(
                     'code' => 200,
                     'message' => 'Usuario creado correctamente',
-                    'data' => ['username' => $input['nombre']]
+                    'data' => ['username' => $input['name']]
                 ));
 
                 return $json;
@@ -55,7 +55,7 @@ class Controller_Usuarios extends Controller_Rest
             if($e->getCode() == 23000){
                 $json = $this->response(array(
                 'code' => 500,
-                'message' => 'Ya existe un usuario con el correo o nombre igual'
+                'message' => 'Ya existe un usuario con el correo o name igual'
                 //'message' => $e->getMessage(),
             ));
 
@@ -97,13 +97,13 @@ class Controller_Usuarios extends Controller_Rest
     public function post_delete()
     {
         $user = Model_Usuarios::find($_POST['id']);
-        $userName = $user->nombre;
+        $userName = $user->name;
         $user->delete();
 
         $json = $this->response(array(
             'code' => 200,
             'message' => 'Usuario borrado',
-            'nombre' => $userName
+            'name' => $userName
         ));
 
         return $json;
@@ -117,7 +117,7 @@ class Controller_Usuarios extends Controller_Rest
                 $input = $_GET;
                 $user = Model_Usuarios::find('all', array(
                     'where' => array(
-                        array('nombre', $input['nombre']),array('password', $input['password'])
+                        array('name', $input['name']),array('password', $input['password'])
                     )
                 ));
 
@@ -126,7 +126,7 @@ class Controller_Usuarios extends Controller_Rest
                     foreach ($user as $key => $value)
                     {
                         $id = $user[$key]->id;
-                        $username = $user[$key]->nombre;
+                        $username = $user[$key]->name;
                         $password = $user[$key]->password;
                     }
                 }
@@ -135,11 +135,11 @@ class Controller_Usuarios extends Controller_Rest
                     return $this->response(array('Error de Autentificacion' => 401));
                 }
 
-                if ($username == $input['nombre'] and $password == $input['password'])
+                if ($username == $input['name'] and $password == $input['password'])
                 {
                     $dataToken = array(
                         "id" => $id,
-                        "nombre" => $username,
+                        "name" => $username,
                         "password" => $password
                     );
 
@@ -148,7 +148,7 @@ class Controller_Usuarios extends Controller_Rest
 
                     return $this->response(array(
                         'Login Correcto' => 220,
-                        ['token' => $token, 'nombre' => $username]
+                        ['token' => $token, 'name' => $username]
                 ));
 
                 }
