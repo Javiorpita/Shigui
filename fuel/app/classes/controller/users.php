@@ -22,10 +22,10 @@ class Controller_Users extends Controller_Rest
                 return $json;
             }
 
-            $users = Model_Usuarios::find('all');
+            $users = Model_Users::find('all');
 
             $input = $_POST;
-            $user = new Model_Usuarios();
+            $user = new Model_Users();
             $user->name = $input['name'];
             $user->password = $input['password'];
             $user->email = $input['email'];
@@ -77,9 +77,9 @@ class Controller_Users extends Controller_Rest
         }        
     }
                                     //Mostrar usuarios
-    public function get_usuarios()
+    public function get_users()
     {
-    	$users = Model_Usuarios::find('all');
+    	$users = Model_Users::find('all');
 
         $json = $this->response(array(
                 'code' => 500,
@@ -96,7 +96,7 @@ class Controller_Users extends Controller_Rest
                                     //Eliminar usuario
     public function post_delete()
     {
-        $user = Model_Usuarios::find($_POST['id']);
+        $user = Model_Users::find($_POST['id']);
         $userName = $user->name;
         $user->delete();
 
@@ -115,7 +115,7 @@ class Controller_Users extends Controller_Rest
         try {
 
                 $input = $_GET;
-                $user = Model_Usuarios::find('all', array(
+                $user = Model_Users::find('all', array(
                     'where' => array(
                         array('name', $input['name']),array('password', $input['password'])
                     )
@@ -173,8 +173,8 @@ class Controller_Users extends Controller_Rest
     public function post_changePassword()
         {
             $change = $_POST;
-            $user = new Model_Usuarios();
-            $user = Model_Usuarios::find('first', array(
+            $user = new Model_Users();
+            $user = Model_Users::find('first', array(
                     'where' => array(
                         array('email', $change['email'])
                     )
@@ -198,7 +198,7 @@ class Controller_Users extends Controller_Rest
             try {
 
                 $input = $_GET;
-                $user = Model_Usuarios::find('first', array(
+                $user = Model_Users::find('first', array(
                     'where' => array(
                         array('email', $input['email']))
                 ));
@@ -224,15 +224,7 @@ class Controller_Users extends Controller_Rest
                 else
                 {
                     return $this->response(array('Error de Autentificacion' => 401));
-                }
-                
-                
-
-
-                    
-
-                
-               
+                }             
             }
         catch (Exception $e)
         {

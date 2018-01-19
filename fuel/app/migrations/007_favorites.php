@@ -1,12 +1,12 @@
 <?php
     namespace Fuel\Migrations;
 
-    class favorite
+    class favorites
     {
 
         function up()
         {
-            \DBUtil::create_table('favorite',
+            \DBUtil::create_table('favorites',
                 array(
             'id_user' => array('constraint' => 11, 'type' => 'int'),
             'id_place' => array('constraint' => 11, 'type' => 'int'),
