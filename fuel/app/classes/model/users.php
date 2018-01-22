@@ -18,8 +18,9 @@ class Model_Users extends Orm\Model
         ),
         'coins' => array(
             'data_type' => 'int'   
+        ),
+        'picture' => array(
+            'data_type' => 'varchar'
         )
-
-
     );
 }

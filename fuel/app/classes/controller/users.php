@@ -31,6 +31,14 @@ class Controller_Users extends Controller_Rest
             $user->email = $input['email'];
             $user->coins = 100;
             if ($user->name == "" || $user->email == "" || $user->password == ""){
+                $dataToken = array(
+                        "id" => $use->id,
+                        "name" => $user->name,
+                        "password" => $user->password
+                    );
+
+
+                    $token = JWT::encode($dataToken, $this->key);
                 $json = $this->response(array(
                 'code' => 400,
                 'message' => 'Se necesita introducir todos los parametros'
@@ -55,7 +63,7 @@ class Controller_Users extends Controller_Rest
             if($e->getCode() == 23000){
                 $json = $this->response(array(
                 'code' => 500,
-                'message' => 'Ya existe un usuario con el correo o name igual'
+                'message' => 'Ya existe un usuario con el correo o nombre igual'
                 //'message' => $e->getMessage(),
             ));
 
@@ -226,15 +234,23 @@ class Controller_Users extends Controller_Rest
                     return $this->response(array('Error de Autentificacion' => 401));
                 }             
             }
-        catch (Exception $e)
-        {
-            $json = $this->response(array(
-                'code' => 500,
-                'message' => 'Error de servidor'
-                //'message' => $e->getMessage(),
-            ));
+            catch (Exception $e)
+            {
+                $json = $this->response(array(
+                    'code' => 500,
+                    'message' => 'Error de servidor'
+                    //'message' => $e->getMessage(),
+                ));
 
-            return $json;
+                return $json;
+
+        }
+    public function post_modifyUser()
+        {
+
+
+
+            
 
         }
 
