@@ -13,6 +13,7 @@ class users
             'password' => array('type' => 'varchar', 'constraint' => 50),
             'picture' => array('type' => 'varchar', 'constraint' => 50),
             'coins' => array('type' => 'int', 'constraint' => 11),
+            //'registered' => array('type' => 'int', 'constraint' => 1),
         ), array('id'));
     }
 

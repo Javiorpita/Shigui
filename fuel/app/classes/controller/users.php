@@ -22,6 +22,16 @@ class Controller_Users extends Controller_Rest
                 return $json;
             }
 
+            if (strlen($_POST['password']) <= 6){
+                $json = $this->response(array(
+                    'code' => 400,
+                    'message' => 'Contraseña demasiado corta'
+                ));
+
+                return $json;
+
+            }
+
             $users = Model_Users::find('all');
 
             $input = $_POST;
@@ -29,16 +39,10 @@ class Controller_Users extends Controller_Rest
             $user->name = $input['name'];
             $user->password = $input['password'];
             $user->email = $input['email'];
+            $user->picture = 'predefinida.jpg';
             $user->coins = 100;
             if ($user->name == "" || $user->email == "" || $user->password == ""){
-                $dataToken = array(
-                        "id" => $use->id,
-                        "name" => $user->name,
-                        "password" => $user->password
-                    );
-
-
-                    $token = JWT::encode($dataToken, $this->key);
+                
                 $json = $this->response(array(
                 'code' => 400,
                 'message' => 'Se necesita introducir todos los parametros'
@@ -46,11 +50,19 @@ class Controller_Users extends Controller_Rest
             }
             else{
                 $user->save();
+                $dataToken = array(
+                        "id" => $user->id,
+                        "name" => $user->name,
+                        "password" => $user->password
+                    );
+
+
+                    $token = JWT::encode($dataToken, $this->key);
 
                 $json = $this->response(array(
                     'code' => 200,
                     'message' => 'Usuario creado correctamente',
-                    'data' => ['username' => $input['name']]
+                    'data' => ['token' => $token, 'username' => $input['name']]
                 ));
 
                 return $json;
@@ -118,141 +130,167 @@ class Controller_Users extends Controller_Rest
     }
                                     //login del usuario
     public function get_login()
-    {
-
-        try {
-
-                $input = $_GET;
-                $user = Model_Users::find('all', array(
-                    'where' => array(
-                        array('name', $input['name']),array('password', $input['password'])
-                    )
-                ));
-
-                if ( ! empty($user) )
-                {
-                    foreach ($user as $key => $value)
-                    {
-                        $id = $user[$key]->id;
-                        $username = $user[$key]->name;
-                        $password = $user[$key]->password;
-                    }
-                }
-                else
-                {
-                    return $this->response(array('Error de Autentificacion' => 401));
-                }
-
-                if ($username == $input['name'] and $password == $input['password'])
-                {
-                    $dataToken = array(
-                        "id" => $id,
-                        "name" => $username,
-                        "password" => $password
-                    );
-
-
-                    $token = JWT::encode($dataToken, $this->key);
-
-                    return $this->response(array(
-                        'Login Correcto' => 220,
-                        ['token' => $token, 'name' => $username]
-                ));
-
-                }
-                else
-                {
-                return $this->response(array('Error de Autenticacion' => 401));
-                }
-            }
-        catch (Exception $e)
-        {
-            $json = $this->response(array(
-                'code' => 500,
-                'message' => 'Error de servidor'
-                //'message' => $e->getMessage(),
-            ));
-
-            return $json;
-
-        }
-
-    }                                       //Cambiar la contraseña
-    public function post_changePassword()
-        {
-            $change = $_POST;
-            $user = new Model_Users();
-            $user = Model_Users::find('first', array(
-                    'where' => array(
-                        array('email', $change['email'])
-                    )
-                ));
-
-            $user->password = $change['password'];
-
-            $user->save();
-
-            $json = $this->response(array(
-                'code' => 200,
-                'message' => 'Contraseña cambiada con exito',
-                'data' => ['password' => $change['password']]
-            ));
-
-            return $json;
-        }
-    public function get_email()
         {
 
             try {
-
-                $input = $_GET;
-                $user = Model_Users::find('first', array(
-                    'where' => array(
-                        array('email', $input['email']))
-                ));
-
-                if ( !empty($user))
-                {
-                    foreach ($user as $key => $value)
-                    {
-                        $id = $user[$key]->id;
-                        $email = $user[$key]->email;
-                    }
-
-
-                    if ($email == $input['email'])
+                if ( empty($_GET['name']) || empty($_GET['password']))
                     {
                         return $this->response(array(
-                        '   Email verificado' => 220,
-                            ['email' => $email]
-                    ));
-
+                            'code' => 400,
+                            'message' => 'Hay campos vacios'
+                        ));
                     }
-                }
+                $input = $_GET;
+                $users = Model_Users::find('all', array(
+                    'where' => array(
+                        array('name', $input['name']),array('password', $input['password'])
+                        )
+                    ));
+                if ( ! empty($users) )
+                    {
+                        foreach ($users as $key => $value)
+                        {
+                            $id = $users[$key]->id;
+                            $name = $users[$key]->name;
+                            $password = $users[$key]->password;
+                        }
+                    }
                 else
-                {
-                    return $this->response(array('Error de Autentificacion' => 401));
-                }             
-            }
+                    {
+                        return $this->response(array(
+                            'code' => 400,
+                            'message' => 'Usuario y contrasaeña no coinciden o son incorrectos'
+                            ));
+                    }
+            
+                        $dataToken = array(
+                            "id" => $id,
+                            "name" => $name,
+                            "password" => $password
+                        );
+
+                        $token = JWT::encode($dataToken, $this->key);
+
+                            return $this->response(array(
+                                'code' => 200,
+                                'message'=> 'Login correcto',
+                                'data' => ['token' => $token, 'name' => $name]
+                            ));
+                    
+                }
             catch (Exception $e)
-            {
-                $json = $this->response(array(
-                    'code' => 500,
-                    'message' => 'Error de servidor'
-                    //'message' => $e->getMessage(),
-                ));
+                {
+                    $json = $this->response(array(
+                        'code' => 500,
+                        'message' => 'Error de servidor'
+                        //'message' => $e->getMessage(),
+                    ));
+                    return $json;
+                }
+            }                             //Cambiar la contraseña
+    function post_recoveryPassword()
+    {
+       if (empty($_POST['id']) || empty($_POST['password']) ) {
+            return $this->createResponse(400, 'Falta algun parametro');
+        } 
+        $id = $_POST['id'];
+        $password = $_POST['password'];
+        try {
 
-                return $json;
-
+            $users = Model_Users::find($id); 
+            if($users != null){
+                $users->password = $password;
+                $users->save();
+                return $this->createResponse(200, 'Nueva contraseña aceptada',array('Nueva contraseña'=>$password) );
+            }else{
+                return $this->createResponse(400, 'El usuario no existe');
+            }
+        } catch (Exception $e) {
+            return $this->createResponse(500, $e->getMessage());
         }
-    public function post_modifyUser()
+    }
+/*
+        function decodeToken()
+    {
+
+        $jwt = apache_request_headers()['Authorization'];
+        $token = JWT::decode($jwt, $this->key , array('HS256'));
+        return $token;
+    }
+
+    function userNotRegistered($email)
+    {
+
+        $users = Model_Users::find('first', array(
+            'where' => array(
+                array('email', $email),
+                array('is_registered', 0)
+                )
+            )); 
+
+        if($users != null){
+            return true;
+        }else{
+            return false;
+        }
+    }
+    */
+
+    function validateToken($jwt)
+    {
+        $token = JWT::decode($jwt, $this->key, array('HS256'));
+
+        $email = $token->data->email;
+        $password = $token->data->password;
+        $id = $token->data->id;
+
+        $users = Model_Users::find('all', array(
+            'where' => array(
+                array('email', $email),
+                array('password', $password),
+                array('id',$id)
+                )
+            ));
+        if($users != null){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+    
+    function get_validateEmail()
+    {
+        if (empty($_GET['email'])) {
+            return $this->createResponse(400, 'El email no es correcto');
+        }
+        $email = $_GET['email'];
+        try {
+
+            $users = Model_Users::find('first', array(
+            'where' => array(
+                array('email', $email)/*,
+                array('is_registered', 1)*/
+                )
+            )); 
+
+            if($users != null){
+                return $this->createResponse(200, 'Email validado',array('email'=>$email, 'id'=>$users->id) );
+            }else{
+                return $this->createResponse(400, 'Email no valido');
+            }
+        } catch (Exception $e) {
+            return $this->createResponse(500, $e->getMessage());
+        }
+    }
+
+
+       /*public function post_editProfile()
         {
 
 
+    //nombre email y foto
 
-            
-
-        }
+        }*/
 
     }    
-}
