@@ -22,10 +22,10 @@ class Controller_Users extends Controller_Rest
                 return $json;
             }
 
-            if (strlen($_POST['password']) <= 6){
+            if (strlen($_POST['password']) < 6 || strlen($_POST['password']) >12){
                 $json = $this->response(array(
                     'code' => 400,
-                    'message' => 'Contraseña demasiado corta'
+                    'message' => 'Contraseña: entre 6 y 12 caracteres'
                 ));
 
                 return $json;
@@ -41,23 +41,24 @@ class Controller_Users extends Controller_Rest
             $user->email = $input['email'];
             $user->picture = 'predefinida.jpg';
             $user->coins = 100;
-            if ($user->name == "" || $user->email == "" || $user->password == ""){
-                
+            if ($user->name == "" || $user->email == "" || $user->password == "")
+            {
                 $json = $this->response(array(
-                'code' => 400,
-                'message' => 'Se necesita introducir todos los parametros'
-            ));
+                    'code' => 400,
+                    'message' => 'Se necesita introducir todos los parametros'
+                ));
             }
-            else{
+            else
+            {
                 $user->save();
                 $dataToken = array(
                         "id" => $user->id,
                         "name" => $user->name,
-                        "password" => $user->password
+                        "password" => $user->password,
+                        "email" => $user->email
                     );
 
-
-                    $token = JWT::encode($dataToken, $this->key);
+                $token = JWT::encode($dataToken, $this->key);
 
                 $json = $this->response(array(
                     'code' => 200,
@@ -66,34 +67,34 @@ class Controller_Users extends Controller_Rest
                 ));
 
                 return $json;
-
             }
             
         } 
         catch (Exception $e) 
         {
-            if($e->getCode() == 23000){
+            if($e->getCode() == 23000)
+            {
                 $json = $this->response(array(
-                'code' => 500,
-                'message' => 'Ya existe un usuario con el correo o nombre igual'
+                    'code' => 500,
+                    'message' => 'Ya existe un usuario con el correo o nombre igual'
                 //'message' => $e->getMessage(),
-            ));
+                ));
 
-            return $json;
+                return $json;
 
             }
-            else{
+            else
+            {
 
                 $json = $this->response(array(
-                'code' => 500,
+                    'code' => 500,
                // 'message' => $e->getCode()
-                'message' => $e->getMessage(),
-            ));
+                    'message' => $e->getMessage(),
+                ));
 
-            return $json;
+                return $json;
 
-            }
-            
+            }  
         }        
     }
                                     //Mostrar usuarios
@@ -102,9 +103,9 @@ class Controller_Users extends Controller_Rest
     	$users = Model_Users::find('all');
 
         $json = $this->response(array(
-                'code' => 500,
-                'message' => 'Esta es la lista de usuarios',
-                'data' => $users
+            'code' => 500,
+            'message' => 'Esta es la lista de usuarios',
+            'data' => $users
 
         ));
 
@@ -126,88 +127,219 @@ class Controller_Users extends Controller_Rest
             'name' => $userName
         ));
 
-        return $json;
+            return $json;
     }
                                     //login del usuario
     public function get_login()
-        {
-
-            try {
-                if ( empty($_GET['name']) || empty($_GET['password']))
-                    {
-                        return $this->response(array(
-                            'code' => 400,
-                            'message' => 'Hay campos vacios'
-                        ));
-                    }
-                $input = $_GET;
-                $users = Model_Users::find('all', array(
-                    'where' => array(
-                        array('name', $input['name']),array('password', $input['password'])
-                        )
-                    ));
-                if ( ! empty($users) )
-                    {
-                        foreach ($users as $key => $value)
-                        {
-                            $id = $users[$key]->id;
-                            $name = $users[$key]->name;
-                            $password = $users[$key]->password;
-                        }
-                    }
-                else
-                    {
-                        return $this->response(array(
-                            'code' => 400,
-                            'message' => 'Usuario y contrasaeña no coinciden o son incorrectos'
-                            ));
-                    }
-            
-                        $dataToken = array(
-                            "id" => $id,
-                            "name" => $name,
-                            "password" => $password
-                        );
-
-                        $token = JWT::encode($dataToken, $this->key);
-
-                            return $this->response(array(
-                                'code' => 200,
-                                'message'=> 'Login correcto',
-                                'data' => ['token' => $token, 'name' => $name]
-                            ));
-                    
-                }
-            catch (Exception $e)
-                {
-                    $json = $this->response(array(
-                        'code' => 500,
-                        'message' => 'Error de servidor'
-                        //'message' => $e->getMessage(),
-                    ));
-                    return $json;
-                }
-            }                             //Cambiar la contraseña
-    function post_recoveryPassword()
     {
-       if (empty($_POST['id']) || empty($_POST['password']) ) {
-            return $this->createResponse(400, 'Falta algun parametro');
+    try {
+            if ( empty($_GET['name']) || empty($_GET['password']))
+            {
+                return $this->response(array(
+                    'code' => 400,
+                    'message' => 'Hay campos vacios'
+                ));
+            }
+            $input = $_GET;
+            $users = Model_Users::find('all', array(
+                    'where' => array(
+                        array('name', $input['name']),
+                        array('password', $input['password']))          
+                    ));
+            if ( ! empty($users) )
+            {
+                foreach ($users as $key => $value)
+                {
+                    $id = $users[$key]->id;
+                    $name = $users[$key]->name;
+                    $password = $users[$key]->password;
+                }
+            }
+            else
+            {
+                return $this->response(array(
+                    'code' => 400,
+                    'message' => 'Usuario y password no coinciden o son incorrectos'
+                    ));
+            }
+                
+            $dataToken = array(
+                "id" => $id,
+                "name" => $name,
+                "password" => $password
+                );
+
+            $token = JWT::encode($dataToken, $this->key);
+
+            return $this->response(array(
+                'code' => 200,
+                'message'=> 'Login correcto',
+                'data' => ['token' => $token, 'name' => $name]
+                ));
+                        
         } 
-        $id = $_POST['id'];
-        $password = $_POST['password'];
+        catch (Exception $e)
+            {
+                $json = $this->response(array(
+                    'code' => 500,
+                    'message' => 'Error de servidor'
+                    //'message' => $e->getMessage(),
+                ));
+                return $json;
+            }
+        }
+                                     //Cambiar la contraseña
+    public function post_recoveryPassword()
+    {
+        try {
+            if ( empty($_POST['email'])) 
+            {
+                $json = $this->response(array(
+                    'code' => 400,
+                    'message' =>  'Parametro email no introducido',
+                    'data' => []
+                ));
+                return $json;
+            }
+            // Validación de e-mail
+            $input = $_POST;
+            $users = Model_Users::find('all', array(
+                'where' => array(
+                    array('email', $input['email'])
+                )
+            ));
+            if ( ! empty($users) )
+            {
+                foreach ($users as $key => $value)
+                {
+                    $id = $users[$key]->id;
+                    $email = $users[$key]->email;
+
+                }
+            }
+            else
+            {
+                return $this->response(array(
+                    'code' => 400,
+                    'message' => 'El email introducido no existe'
+                    ));
+            }
+            
+                $tokendata = array(
+                    'id' => $id,
+                    'email' => $email
+                );
+                $token = JWT::encode($tokendata, $this->key);
+                $json = $this->response(array(
+                    'code' => 200,
+                    'message' => 'Email validado',
+                    'data' => ['token' => $token]
+                ));
+                return $json;
+            
+        }
+        catch (Exception $e)
+        {
+            $json = $this->response(array(
+                'code' => 500,
+                'message' => $e->getMessage()
+            ));
+            return $json;
+        }
+    }
+
+    function post_changePassword()
+    {
+
+    try
+    {
+        $header = apache_request_headers();
+        if (isset($header['Authorization'])) 
+            {
+                $token = $header['Authorization'];
+                $dataJwtUser = JWT::decode($token, $this->key, array('HS256'));
+            }
+
+        if (empty($_POST['password'])) 
+            {
+                $json = $this->response(array(
+                    'code' => 400,
+                    'message' =>  'No puede haber campos vacios',
+                    'data' => []
+                ));
+                return $json;
+            }
+
+        if (strlen($_POST['password']) < 6 || strlen($_POST['password']) >12){
+                $json = $this->response(array(
+                    'code' => 400,
+                    'message' => 'Contraseña: entre 6 y 12 caracteres'
+                ));
+
+                return $json;
+
+            }
+            
+            $input = $_POST;
+            $user = Model_Users::find($dataJwtUser->id);
+            $user->password = $input['password'];
+           
+            $user->save();
+                            
+            $json = $this->response(array(
+                'code' => 200,
+                'message' =>  'Contraseña cambiada correctamente',
+                'data' => []
+            ));
+            return $json;
+          
+       
+    }
+        catch (Exception $e)
+        {
+            $json = $this->response(array(
+                'code' => 500,
+                'message' => $e->getMessage()
+            ));
+            return $json;
+        }
+    }
+    function post_modifyUser()
+    {
+        $name = $_POST['name'];
+        $picture = $_POST['picture'];
+        
         try {
 
-            $users = Model_Users::find($id); 
-            if($users != null){
-                $users->password = $password;
+            $users = Model_Users::find($email); 
+
+            if($users != null)
+            {
+                $users->name = $name;
+                $users->picture = $picture;
                 $users->save();
-                return $this->createResponse(200, 'Nueva contraseña aceptada',array('Nueva contraseña'=>$password) );
-            }else{
-                return $this->createResponse(400, 'El usuario no existe');
+                return $this->response(array(
+                        'code' => 200,
+                        'message' => 'Cambios completados con exito'
+                        ));//,array('Nueva contraseña'=>$password));
+            }else
+            {
+                return $this->response(array(
+                        'code' => 400,
+                        'message' => 'El usuario no existe'
+                        ));
             }
         } catch (Exception $e) {
-            return $this->createResponse(500, $e->getMessage());
+            return $this->response(array(
+                    'code' => 500,
+                    'message' => $e->getMessage()
+                    ));
         }
+
+
+
+
+
     }
 /*
         function decodeToken()
@@ -234,7 +366,7 @@ class Controller_Users extends Controller_Rest
             return false;
         }
     }
-    */
+    
 
     function validateToken($jwt)
     {
@@ -257,32 +389,9 @@ class Controller_Users extends Controller_Rest
             return false;
         }
     }
-
+*/
     
-    function get_validateEmail()
-    {
-        if (empty($_GET['email'])) {
-            return $this->createResponse(400, 'El email no es correcto');
-        }
-        $email = $_GET['email'];
-        try {
 
-            $users = Model_Users::find('first', array(
-            'where' => array(
-                array('email', $email)/*,
-                array('is_registered', 1)*/
-                )
-            )); 
-
-            if($users != null){
-                return $this->createResponse(200, 'Email validado',array('email'=>$email, 'id'=>$users->id) );
-            }else{
-                return $this->createResponse(400, 'Email no valido');
-            }
-        } catch (Exception $e) {
-            return $this->createResponse(500, $e->getMessage());
-        }
-    }
 
 
        /*public function post_editProfile()
