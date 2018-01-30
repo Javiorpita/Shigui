@@ -16,7 +16,8 @@ class Controller_Users extends Controller_Rest
             {
                 $json = $this->response(array(
                     'code' => 400,
-                    'message' => 'Error en las credenciales, prueba otra vez'
+                    'message' => 'Error en las credenciales, prueba otra vez',
+                    'data' => []
                 ));
 
                 return $json;
@@ -25,7 +26,8 @@ class Controller_Users extends Controller_Rest
             if (strlen($_POST['password']) < 6 || strlen($_POST['password']) >12){
                 $json = $this->response(array(
                     'code' => 400,
-                    'message' => 'Contraseña: entre 6 y 12 caracteres'
+                    'message' => 'Contraseña: entre 6 y 12 caracteres',
+                    'data' => []
                 ));
 
                 return $json;
@@ -39,13 +41,14 @@ class Controller_Users extends Controller_Rest
             $user->name = $input['name'];
             $user->password = $input['password'];
             $user->email = $input['email'];
-            $user->picture = 'predefinida.jpg';
+            $user->picture = '';
             $user->coins = 100;
             if ($user->name == "" || $user->email == "" || $user->password == "")
             {
                 $json = $this->response(array(
                     'code' => 400,
-                    'message' => 'Se necesita introducir todos los parametros'
+                    'message' => 'Se necesita introducir todos los parametros',
+                    'data' => []
                 ));
             }
             else
@@ -76,7 +79,8 @@ class Controller_Users extends Controller_Rest
             {
                 $json = $this->response(array(
                     'code' => 500,
-                    'message' => 'Ya existe un usuario con el correo o nombre igual'
+                    'message' => 'Ya existe un usuario con el correo o nombre igual',
+                    'data' => []
                 //'message' => $e->getMessage(),
                 ));
 
@@ -90,6 +94,7 @@ class Controller_Users extends Controller_Rest
                     'code' => 500,
                // 'message' => $e->getCode()
                     'message' => $e->getMessage(),
+                    'data' => []
                 ));
 
                 return $json;
@@ -137,7 +142,8 @@ class Controller_Users extends Controller_Rest
             {
                 return $this->response(array(
                     'code' => 400,
-                    'message' => 'Hay campos vacios'
+                    'message' => 'Hay campos vacios',
+                    'data' => []
                 ));
             }
             $input = $_GET;
@@ -159,7 +165,8 @@ class Controller_Users extends Controller_Rest
             {
                 return $this->response(array(
                     'code' => 400,
-                    'message' => 'Usuario y password no coinciden o son incorrectos'
+                    'message' => 'Usuario y password no coinciden o son incorrectos',
+                    'data' => []
                     ));
             }
                 
@@ -182,7 +189,8 @@ class Controller_Users extends Controller_Rest
             {
                 $json = $this->response(array(
                     'code' => 500,
-                    'message' => 'Error de servidor'
+                    'message' => 'Error de servidor',
+                    'data' => []
                     //'message' => $e->getMessage(),
                 ));
                 return $json;
@@ -221,7 +229,8 @@ class Controller_Users extends Controller_Rest
             {
                 return $this->response(array(
                     'code' => 400,
-                    'message' => 'El email introducido no existe'
+                    'message' => 'El email introducido no existe',
+                    'data' => []
                     ));
             }
             
@@ -242,7 +251,8 @@ class Controller_Users extends Controller_Rest
         {
             $json = $this->response(array(
                 'code' => 500,
-                'message' => $e->getMessage()
+                'message' => $e->getMessage(),
+                'data' => []
             ));
             return $json;
         }
@@ -251,96 +261,105 @@ class Controller_Users extends Controller_Rest
     function post_changePassword()
     {
 
-    try
-    {
-        $header = apache_request_headers();
-        if (isset($header['Authorization'])) 
-            {
-                $token = $header['Authorization'];
-                $dataJwtUser = JWT::decode($token, $this->key, array('HS256'));
-            }
+        try
+        {
+            $header = apache_request_headers();
+            if (isset($header['Authorization'])) 
+                {
+                    $token = $header['Authorization'];
+                    $dataJwtUser = JWT::decode($token, $this->key, array('HS256'));
+                }
 
-        if (empty($_POST['password'])) 
-            {
+            if (empty($_POST['password'])) 
+                {
+                    $json = $this->response(array(
+                        'code' => 400,
+                        'message' =>  'No puede haber campos vacios',
+                        'data' => []
+                    ));
+                    return $json;
+                }
+
+            if (strlen($_POST['password']) < 6 || strlen($_POST['password']) >12){
+                    $json = $this->response(array(
+                        'code' => 400,
+                        'message' => 'Contraseña: entre 6 y 12 caracteres',
+                        'data' => []
+                    ));
+
+                    return $json;
+
+                }
+
+                $input = $_POST;
+                $user = Model_Users::find($dataJwtUser->id);
+                $user->password = $input['password'];
+               
+                $user->save();
+                                
                 $json = $this->response(array(
-                    'code' => 400,
-                    'message' =>  'No puede haber campos vacios',
+                    'code' => 200,
+                    'message' =>  'Contraseña cambiada correctamente',
                     'data' => []
                 ));
                 return $json;
-            }
-
-        if (strlen($_POST['password']) < 6 || strlen($_POST['password']) >12){
-                $json = $this->response(array(
-                    'code' => 400,
-                    'message' => 'Contraseña: entre 6 y 12 caracteres'
-                ));
-
-                return $json;
-
-            }
-            
-            $input = $_POST;
-            $user = Model_Users::find($dataJwtUser->id);
-            $user->password = $input['password'];
+              
            
-            $user->save();
-                            
-            $json = $this->response(array(
-                'code' => 200,
-                'message' =>  'Contraseña cambiada correctamente',
-                'data' => []
-            ));
-            return $json;
-          
-       
-    }
+        }
         catch (Exception $e)
         {
             $json = $this->response(array(
                 'code' => 500,
-                'message' => $e->getMessage()
+                'message' => $e->getMessage(),
+                'data' => []
             ));
             return $json;
         }
     }
     function post_modifyUser()
     {
-        $name = $_POST['name'];
-        $picture = $_POST['picture'];
-        
         try {
+            $header = apache_request_headers();
 
-            $users = Model_Users::find($email); 
+            if (isset($header['Authorization'])) 
+                {
+                    $token = $header['Authorization'];
+                    $dataJwtUser = JWT::decode($token, $this->key, array('HS256'));
+                }
 
-            if($users != null)
-            {
-                $users->name = $name;
-                $users->picture = $picture;
-                $users->save();
-                return $this->response(array(
-                        'code' => 200,
-                        'message' => 'Cambios completados con exito'
-                        ));//,array('Nueva contraseña'=>$password));
-            }else
-            {
-                return $this->response(array(
+            if (empty($_POST['name'] || $_POST['picture'])) 
+                {
+                    $json = $this->response(array(
                         'code' => 400,
-                        'message' => 'El usuario no existe'
-                        ));
-            }
+                        'message' =>  'No puede haber campos vacios',
+                        'data' => []
+                    ));
+                    return $json;
+                }
+
+                    $input = $_POST;
+                    $user = Model_Users::find($dataJwtUser->id);
+                    $user->name = $input['name'];
+                    $user->picture = $input['picture'];
+               
+                    $user->save();
+                                
+                    $json = $this->response(array(
+                        'code' => 200,
+                        'message' =>  'Cambios realizados correctamente',
+                        'data' => []
+                ));
+                return $json;
+              
         } catch (Exception $e) {
             return $this->response(array(
                     'code' => 500,
-                    'message' => $e->getMessage()
+                    'message' => $e->getMessage(),
+                    'data' => []
                     ));
         }
-
-
-
-
-
     }
+    
 /*
         function decodeToken()
     {
