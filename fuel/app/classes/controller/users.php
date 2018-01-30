@@ -66,7 +66,7 @@ class Controller_Users extends Controller_Rest
                 $json = $this->response(array(
                     'code' => 200,
                     'message' => 'Usuario creado correctamente',
-                    'data' => ['token' => $token, 'username' => $input['name']]
+                    'data' => $token
                 ));
 
                 return $json;
@@ -108,7 +108,7 @@ class Controller_Users extends Controller_Rest
     	$users = Model_Users::find('all');
 
         $json = $this->response(array(
-            'code' => 500,
+            'code' => 200,
             'message' => 'Esta es la lista de usuarios',
             'data' => $users
 
@@ -117,6 +117,29 @@ class Controller_Users extends Controller_Rest
         return $json;
 
     	//return $this->response(Arr::reindex($users));
+
+    }
+    public function get_user()
+    {
+
+            $header = apache_request_headers();
+            if (isset($header['Authorization'])) 
+                {
+                    $token = $header['Authorization'];
+                    $dataJwtUser = JWT::decode($token, $this->key, array('HS256'));
+                }
+        $user = Model_Users::find($dataJwtUser->id);
+
+        $json = $this->response(array(
+            'code' => 200,
+            'message' => 'Este es el usuario',
+            'data' => $user
+
+        ));
+
+        return $json;
+
+        //return $this->response(Arr::reindex($users));
 
     }
                                     //Eliminar usuario
@@ -181,7 +204,7 @@ class Controller_Users extends Controller_Rest
             return $this->response(array(
                 'code' => 200,
                 'message'=> 'Login correcto',
-                'data' => ['token' => $token, 'name' => $name]
+                'data' => $token
                 ));
                         
         } 
@@ -242,7 +265,7 @@ class Controller_Users extends Controller_Rest
                 $json = $this->response(array(
                     'code' => 200,
                     'message' => 'Email validado',
-                    'data' => ['token' => $token]
+                    'data' => $token
                 ));
                 return $json;
             
@@ -327,7 +350,7 @@ class Controller_Users extends Controller_Rest
                     $dataJwtUser = JWT::decode($token, $this->key, array('HS256'));
                 }
 
-            if (empty($_POST['name'] || $_POST['picture'])) 
+            if (empty($_POST['name'])) 
                 {
                     $json = $this->response(array(
                         'code' => 400,
@@ -338,9 +361,28 @@ class Controller_Users extends Controller_Rest
                 }
 
                     $input = $_POST;
+
+                    $users = Model_Users::find('all', array(
+                            'where' => array(
+                                array('name', $input['name'])
+                            )
+            ));
+
+                    if($users != null){
+                        $json = $this->response(array(
+                            'code' => 500,
+                            'message' => 'Ya existe un usuario con ese nombre',
+                            'data' => []
+                        //'message' => $e->getMessage(),
+                        ));
+
+                        return $json;
+                    }
+
                     $user = Model_Users::find($dataJwtUser->id);
                     $user->name = $input['name'];
-                    $user->picture = $input['picture'];
+                    
+                    
                
                     $user->save();
                                 
@@ -350,16 +392,86 @@ class Controller_Users extends Controller_Rest
                         'data' => []
                 ));
                 return $json;
-              
+
+                
         } catch (Exception $e) {
-            return $this->response(array(
+            if($e->getCode() == 23000)
+            {
+                return $this->response(array(
                     'code' => 500,
                     'message' => $e->getMessage(),
                     'data' => []
                     ));
+            }
         }
     }
-    
+
+    public function post_uploadImage()
+    {
+
+        try{
+            $header = apache_request_headers();
+
+            if (isset($header['Authorization'])) 
+                {
+                    $token = $header['Authorization'];
+                    $dataJwtUser = JWT::decode($token, $this->key, array('HS256'));
+                }
+
+
+        // Custom configuration for this upload
+        $config = array(
+            'path' => DOCROOT . 'assets/img',
+            'randomize' => true,
+            'ext_whitelist' => array('img', 'jpg', 'jpeg', 'gif', 'png'),
+        );
+
+        // process the uploaded files in $_FILES
+        Upload::process($config);
+
+        // if there are any valid files
+        if (Upload::is_valid())
+        {
+            // save them according to the config
+            Upload::save();
+
+            foreach(Upload::get_files() as $file)
+            {
+                $user = Model_Users::find($dataJwtUser->id);
+                $user->picture = 'http://' . $_SERVER['SERVER_NAME'] . '/Shigui/public/assets/img/' . $file['saved_as'];
+                $user->save();
+            }
+        }
+
+        return $this->response(array(
+            'code' => 200,
+            'message' => 'Datos actualizados',
+            'data' => [$user]
+        ));
+
+
+        // and process any errors
+        
+
+        foreach (Upload::get_errors() as $file)
+        {
+            return $this->response(array(
+                'code' => 500,
+                'message' => 'No se ha podido subir la imagen',
+                'data' => []
+            ));
+        }
+      
+        }catch (Exception $e){
+            return $this->response(array(
+                'code' => 500,
+                'message' => $e->getMessage(),
+                'data' => []
+            ));
+
+    }
+
+}
 /*
         function decodeToken()
     {
