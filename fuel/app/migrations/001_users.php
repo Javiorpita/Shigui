@@ -8,10 +8,11 @@ class users
     {
         \DBUtil::create_table('users', array(
             'id' => array('type' => 'int', 'constraint' => 11, 'auto_increment' => true),
-            'name' => array('type' => 'varchar', 'constraint' => 50),
-            'email' => array('type' => 'varchar', 'constraint' => 50),
-            'password' => array('type' => 'varchar', 'constraint' => 50),
-            'picture' => array('type' => 'varchar', 'constraint' => 50),
+            'name' => array('type' => 'varchar', 'constraint' => 500),
+            'email' => array('type' => 'varchar', 'constraint' => 500),
+            'password' => array('type' => 'varchar', 'constraint' => 500),
+            'picture' => array('type' => 'varchar', 'constraint' => 500
+        ),
             'coins' => array('type' => 'int', 'constraint' => 11),
             //'registered' => array('type' => 'int', 'constraint' => 1),
         ), array('id'));

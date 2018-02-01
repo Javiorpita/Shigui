@@ -37,9 +37,13 @@ class Controller_Users extends Controller_Rest
             $users = Model_Users::find('all');
 
             $input = $_POST;
+
+            $password = $input['password'];
+            $dataJwtPassword = JWT::encode($password, $this->key);
+
             $user = new Model_Users();
             $user->name = $input['name'];
-            $user->password = $input['password'];
+            $user->password = $dataJwtPassword;
             $user->email = $input['email'];
             $user->picture = '';
             $user->coins = 100;
@@ -53,11 +57,12 @@ class Controller_Users extends Controller_Rest
             }
             else
             {
+
                 $user->save();
                 $dataToken = array(
                         "id" => $user->id,
                         "name" => $user->name,
-                        "password" => $user->password,
+                        "password" => $dataJwtPassword,
                         "email" => $user->email
                     );
 
@@ -161,6 +166,9 @@ class Controller_Users extends Controller_Rest
     public function get_login()
     {
     try {
+
+     
+
             if ( empty($_GET['name']) || empty($_GET['password']))
             {
                 return $this->response(array(
@@ -170,13 +178,23 @@ class Controller_Users extends Controller_Rest
                 ));
             }
             $input = $_GET;
+           
+
+            $dataJwtPassword = JWT::decode($password, $this->key, array('HS256'));
+            
+
             $users = Model_Users::find('all', array(
                     'where' => array(
                         array('name', $input['name']),
-                        array('password', $input['password']))          
+                        array('password', $input['password']))         
                     ));
+            
+                var_dump($users->password);
+                exit;
             if ( ! empty($users) )
             {
+                
+
                 foreach ($users as $key => $value)
                 {
                     $id = $users[$key]->id;
@@ -184,6 +202,7 @@ class Controller_Users extends Controller_Rest
                     $password = $users[$key]->password;
                 }
             }
+
             else
             {
                 return $this->response(array(
@@ -281,7 +300,7 @@ class Controller_Users extends Controller_Rest
         }
     }
 
-    function post_changePassword()
+    public function post_changePassword()
     {
 
         try
@@ -291,6 +310,8 @@ class Controller_Users extends Controller_Rest
                 {
                     $token = $header['Authorization'];
                     $dataJwtUser = JWT::decode($token, $this->key, array('HS256'));
+
+
                 }
 
             if (empty($_POST['password'])) 
@@ -306,7 +327,7 @@ class Controller_Users extends Controller_Rest
             if (strlen($_POST['password']) < 6 || strlen($_POST['password']) >12){
                     $json = $this->response(array(
                         'code' => 400,
-                        'message' => 'Contraseña: entre 6 y 12 caracteres',
+                        'message' => 'Password: entre 6 y 12 caracteres',
                         'data' => []
                     ));
 
@@ -322,7 +343,7 @@ class Controller_Users extends Controller_Rest
                                 
                 $json = $this->response(array(
                     'code' => 200,
-                    'message' =>  'Contraseña cambiada correctamente',
+                    'message' =>  'Password cambiada correctamente',
                     'data' => []
                 ));
                 return $json;
@@ -432,6 +453,7 @@ class Controller_Users extends Controller_Rest
         // if there are any valid files
         if (Upload::is_valid())
         {
+            
             // save them according to the config
             Upload::save();
 
