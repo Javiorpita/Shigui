@@ -178,19 +178,17 @@ class Controller_Users extends Controller_Rest
                 ));
             }
             $input = $_GET;
-           
 
-            $dataJwtPassword = JWT::decode($password, $this->key, array('HS256'));
+            $password = $input['password'];
+            $dataJwtPassword = JWT::encode($password, $this->key);
             
 
             $users = Model_Users::find('all', array(
                     'where' => array(
                         array('name', $input['name']),
-                        array('password', $input['password']))         
+                        array('password', $dataJwtPassword))          
                     ));
             
-                var_dump($users->password);
-                exit;
             if ( ! empty($users) )
             {
                 
@@ -202,7 +200,6 @@ class Controller_Users extends Controller_Rest
                     $password = $users[$key]->password;
                 }
             }
-
             else
             {
                 return $this->response(array(
