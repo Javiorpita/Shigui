@@ -20,4 +20,13 @@ class Model_Valuations extends Orm\Model
             'data_type' => 'int'   
         ),
     );
+    protected static $_has_many = array(
+        'users' => array(
+            'key_from' => 'id',
+            'model_to' => 'Model_Places',
+            'key_to' => 'id_maps',
+            'cascade_save' => false,
+            'cascade_delete' => false,
+        )
+    );
 }

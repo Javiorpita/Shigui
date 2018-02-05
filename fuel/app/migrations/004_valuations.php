@@ -7,12 +7,13 @@ class valuations
     function up()
     {
         \DBUtil::create_table('valuations',array(
-        'id' => array('constraint' => 11, 'type' => 'int', 'auto_increment' => true),
-        'comentary' => array('constraint' => 50, 'type' => 'varchar'),
+        
+        'comentary' => array('constraint' => 1000, 'type' => 'varchar'),
         'value' => array('constraint' => 11, 'type' => 'int'),
+        'date' => array('constraint' => 20, 'type' => 'varchar'),
         'id_users' => array('constraint' => 11, 'type' => 'int'),
-        'id_places' => array('constraint' => 11, 'type' => 'int'),
-    ), array('id'), false, 'InnoDB', 'utf8_unicode_ci',
+        'id_maps_places' => array('constraint' => 255, 'type' => 'varchar'),
+    ), array('id_users','id_maps_places'), false, 'InnoDB', 'utf8_unicode_ci',
     array(
         array(
             'constraint' => 'foreingKeyusers',
@@ -27,13 +28,13 @@ class valuations
         ), 
         array(
                 'constraint' => 'foreingKeyplaces',
-                'key' => 'id_places',
+                'key' => 'id_maps_places',
                 'reference' => array(
                     'table' => 'places',
-                    'column' => 'id',
+                    'column' => 'id_maps',
                 ),
                 'on_update' => 'CASCADE',
-                'on_delete' => 'RESTRICT'
+                'on_delete' => 'CASCADE'
             )
         )
     );
