@@ -4,27 +4,33 @@ class Model_Valuations extends Orm\Model
 {
     protected static $_table_name = 'valuations';
 
-    protected static $_primary_key = array('id');
+    protected static $_primary_key = array('id_users','id_place');
     protected static $_properties = array(
-        'id', // both validation & typing observers will ignore the PK
+        'id_users',
+        'id_place',// both validation & typing observers will ignore the PK
         'comentary' => array(
             'data_type' => 'varchar'   
         ),
         'value' => array(
             'data_type' => 'int'   
         ),
-        'id_user' => array(
-            'data_type' => 'int'   
+        'date' => array(
+            'data_type' => 'varchar'   
         ),
-         'id_place' => array(
-            'data_type' => 'int'   
-        ),
+      
     );
-    protected static $_has_many = array(
-        'users' => array(
-            'key_from' => 'id',
+  protected static $_has_many = array(
+        'places' => array(
+            'key_from' => 'id_place',
             'model_to' => 'Model_Places',
-            'key_to' => 'id_maps',
+            'key_to' => 'id',
+            'cascade_save' => false,
+            'cascade_delete' => false,
+        ),
+        'users' => array(
+            'key_from' => 'id_users',
+            'model_to' => 'Model_Users',
+            'key_to' => 'id',
             'cascade_save' => false,
             'cascade_delete' => false,
         )

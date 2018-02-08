@@ -8,8 +8,8 @@ class users
     {
         \DBUtil::create_table('users', array(
             'id' => array('type' => 'int', 'constraint' => 11, 'auto_increment' => true),
-            'name' => array('type' => 'varchar', 'constraint' => 500),
-            'email' => array('type' => 'varchar', 'constraint' => 500),
+            'name' => array('type' => 'varchar', 'constraint' => 100),
+            'email' => array('type' => 'varchar', 'constraint' => 100),
             'password' => array('type' => 'varchar', 'constraint' => 500),
             'picture' => array('type' => 'varchar', 'constraint' => 500
         ),

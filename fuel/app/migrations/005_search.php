@@ -9,8 +9,8 @@
             \DBUtil::create_table('search',
                 array(
             'id_user' => array('constraint' => 11, 'type' => 'int'),
-            'id_maps_place' => array('constraint' => 255, 'type' => 'varchar'),
-        ), array('id_user','id_maps_place'), false, 'InnoDB', 'utf8_unicode_ci',
+            'id_place' => array('constraint' => 11, 'type' => 'int'),
+        ), array('id_user','id_place'), false, 'InnoDB', 'utf8_unicode_ci',
         array(
             array(
                 'constraint' => 'foreingKeySearchToUsers',
@@ -24,10 +24,10 @@
             ),
             array(
                 'constraint' => 'foreingKeySearchToPlaces',
-                'key' => 'id_maps_place',
+                'key' => 'id_place',
                 'reference' => array(
                     'table' => 'places',
-                    'column' => 'id_maps',
+                    'column' => 'id',
                 ),
                 'on_update' => 'CASCADE',
                 'on_delete' => 'RESTRICT'

@@ -12,8 +12,8 @@ class valuations
         'value' => array('constraint' => 11, 'type' => 'int'),
         'date' => array('constraint' => 20, 'type' => 'varchar'),
         'id_users' => array('constraint' => 11, 'type' => 'int'),
-        'id_maps_places' => array('constraint' => 255, 'type' => 'varchar'),
-    ), array('id_users','id_maps_places'), false, 'InnoDB', 'utf8_unicode_ci',
+        'id_place' => array('constraint' => 11, 'type' => 'int'),
+    ), array('id_users','id_place'), false, 'InnoDB', 'utf8_unicode_ci',
     array(
         array(
             'constraint' => 'foreingKeyusers',
@@ -28,10 +28,10 @@ class valuations
         ), 
         array(
                 'constraint' => 'foreingKeyplaces',
-                'key' => 'id_maps_places',
+                'key' => 'id_place',
                 'reference' => array(
                     'table' => 'places',
-                    'column' => 'id_maps',
+                    'column' => 'id',
                 ),
                 'on_update' => 'CASCADE',
                 'on_delete' => 'CASCADE'
