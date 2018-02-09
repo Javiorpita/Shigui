@@ -136,3 +136,10 @@ ERROR - 2018-02-09 10:46:44 --> Error - Primary key on model Model_Places cannot
 WARNING - 2018-02-09 10:50:06 --> Fuel\Core\Fuel::init - The configured locale en_US is not installed on your system.
 WARNING - 2018-02-09 10:50:20 --> Fuel\Core\Fuel::init - The configured locale en_US is not installed on your system.
 ERROR - 2018-02-09 10:50:20 --> Error - Primary key on model Model_Places cannot be changed. in /var/www/html/Shigui/fuel/packages/orm/classes/model.php on line 1240
+WARNING - 2018-02-09 17:39:01 --> Fuel\Core\Fuel::init - The configured locale en_US is not installed on your system.
+WARNING - 2018-02-09 17:39:10 --> Fuel\Core\Fuel::init - The configured locale en_US is not installed on your system.
+WARNING - 2018-02-09 17:39:12 --> Fuel\Core\Fuel::init - The configured locale en_US is not installed on your system.
+WARNING - 2018-02-09 17:39:14 --> Fuel\Core\Fuel::init - The configured locale en_US is not installed on your system.
+WARNING - 2018-02-09 17:39:15 --> Fuel\Core\Fuel::init - The configured locale en_US is not installed on your system.
+WARNING - 2018-02-09 17:39:16 --> Fuel\Core\Fuel::init - The configured locale en_US is not installed on your system.
+WARNING - 2018-02-09 17:39:19 --> Fuel\Core\Fuel::init - The configured locale en_US is not installed on your system.
