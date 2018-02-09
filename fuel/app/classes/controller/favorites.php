@@ -2,7 +2,7 @@
 
 use \Firebase\JWT\JWT;
 
-class Controller_Valuations extends Controller_Rest
+class Controller_Favorites extends Controller_Rest
 {
     private $key = "juf3dhu3hufdchv3xui3ucxj";
 
@@ -171,12 +171,10 @@ class Controller_Valuations extends Controller_Rest
             )
         )); 
 
-
         foreach ($places as $key => $place) 
         {
             $idPlace = $place->id;
         }
-       
 
 
         $valuations = Model_Valuations::find('all', array(
@@ -398,111 +396,6 @@ class Controller_Valuations extends Controller_Rest
        
         //return $this->response(Arr::reindex($users));
 
-    }
-
-
-    public function post_delete()
-    {
-        
-        try
-            {
-                $headers = apache_request_headers();
-                $token = $headers['Authorization'];
-                $dataJwtUser = JWT::decode($token, $this->key, array('HS256'));
-
-        
-      
-
-                $users = Model_Users::find('all', array(
-                    'where' => array(
-                        array('id', $dataJwtUser->id),
-                        array('name', $dataJwtUser->name),
-                        array('password', $dataJwtUser->password)
-               
-                    )
-                 ));
-
-            }    
-            catch (Exception $e)
-            {
-                $json = $this->response(array(
-                    'code' => 500,
-                    'message' => $e->getMessage(),
-                    'data' => []
-                ));
-                return $json;
-               
-            }
-
-
-        $input = $_POST;
-
-        if($input['id_maps'] == '')
-        {
-            $json = $this->response(array(
-                    'code' => 500,
-                    'message' => 'id_maps vacio',
-                    'data' => []
-                ));
-                return $json;
-        }
-
-        $places = Model_Places::find('all', array(
-            'where' => array(
-                array('id_maps', $input['id_maps']),
-                
-               
-            )
-        ));
-        
-        if( empty($places)) 
-        {
-            $json = $this->response(array(
-                    'code' => 500,
-                    'message' => 'id no encontrado',
-                    'data' => []
-                ));
-                return $json;
-
-        } 
-
-
-
-        foreach ($places as $key => $place) 
-        {
-            $idPlace = $place->id;
-        }
-
-       
-
-        
-
-
-        $valuations = Model_Valuations::find('all', array(
-            'where' => array(
-                array('id_users', $dataJwtUser->id),
-                array('id_place', $idPlace), 
-                
-               
-            )
-        ));
-
-        foreach ($valuations as $key => $valuation) 
-        {
-            $modelValuation = $valuation;
-        }
-
-
-        
-        $modelValuation->delete();
-
-        $json = $this->response(array(
-            'code' => 200,
-            'message' => 'Usuario borrado',
-            'data' => ''
-        ));
-
-            return $json;
     }
     /*    function decodeToken()
     {

@@ -34,7 +34,7 @@ class valuations
                     'column' => 'id',
                 ),
                 'on_update' => 'CASCADE',
-                'on_delete' => 'CASCADE'
+                'on_delete' => 'RESTRICT'
             )
         )
     );
