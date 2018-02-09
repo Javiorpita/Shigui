@@ -38,12 +38,12 @@ class Controller_Users extends Controller_Rest
 
             $input = $_POST;
 
-            $password = $input['password'];
-            $dataJwtPassword = JWT::encode($password, $this->key);
+            /*$password = ['password' => $input['password']];
+            $dataJwtPassword = JWT::decode($password, $this->key);*/
 
             $user = new Model_Users();
             $user->name = $input['name'];
-            $user->password = $dataJwtPassword;
+            $user->password = $input['password'];
             $user->email = $input['email'];
             $user->picture = '';
             $user->coins = 100;
@@ -62,7 +62,7 @@ class Controller_Users extends Controller_Rest
                 $dataToken = array(
                         "id" => $user->id,
                         "name" => $user->name,
-                        "password" => $dataJwtPassword,
+                        "password" => $user->password,
                         "email" => $user->email
                     );
 
@@ -179,15 +179,28 @@ class Controller_Users extends Controller_Rest
             }
             $input = $_GET;
 
-            $password = $input['password'];
-            $dataJwtPassword = JWT::encode($password, $this->key);
+            //$password = ['password' => $users->Password];
+
+          
+           // $passwordDecode = JWT::decode($password, $this->key, array('HS256'));
+
             
 
             $users = Model_Users::find('all', array(
-                    'where' => array(
-                        array('name', $input['name']),
-                        array('password', $dataJwtPassword))          
+                        'where' => array(
+                            array('name', $input['name']),
+                            array('password', $input['password']),
+                        )          
                     ));
+
+            /*foreach ($users as $key => $user) 
+            {
+                $passwordEncode = ['password' => $users->Password];
+            }
+
+            var_dump($dataJwtPassword);*/
+
+            
             
             if ( ! empty($users) )
             {
@@ -198,6 +211,7 @@ class Controller_Users extends Controller_Rest
                     $id = $users[$key]->id;
                     $name = $users[$key]->name;
                     $password = $users[$key]->password;
+                    
                 }
             }
             else
@@ -229,7 +243,7 @@ class Controller_Users extends Controller_Rest
                 $json = $this->response(array(
                     'code' => 500,
                     'message' => 'Error de servidor',
-                    'data' => []
+                    'data' => $e->getMessage()
                     //'message' => $e->getMessage(),
                 ));
                 return $json;
