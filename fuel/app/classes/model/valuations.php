@@ -4,9 +4,9 @@ class Model_Valuations extends Orm\Model
 {
     protected static $_table_name = 'valuations';
 
-    protected static $_primary_key = array('id_users','id_place');
+    protected static $_primary_key = array('id_user','id_place');
     protected static $_properties = array(
-        'id_users',
+        'id_user',
         'id_place',// both validation & typing observers will ignore the PK
         'comentary' => array(
             'data_type' => 'varchar'   
@@ -15,6 +15,12 @@ class Model_Valuations extends Orm\Model
             'data_type' => 'int'   
         ),
         'date' => array(
+            'data_type' => 'varchar'   
+        ),
+        'user' => array(
+            'data_type' => 'varchar'   
+        ),
+        'place' => array(
             'data_type' => 'varchar'   
         ),
       

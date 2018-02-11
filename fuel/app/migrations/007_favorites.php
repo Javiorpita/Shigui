@@ -10,6 +10,7 @@
                 array(
             'id_user' => array('constraint' => 11, 'type' => 'int'),
             'id_place' => array('constraint' => 11, 'type' => 'int'),
+            'place' => array('constraint' => 100, 'type' => 'varchar'),
         ), array('id_user','id_place'), false, 'InnoDB', 'utf8_unicode_ci',
         array(
             array(

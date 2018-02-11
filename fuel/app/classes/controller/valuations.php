@@ -56,6 +56,7 @@ class Controller_Valuations extends Controller_Rest
             foreach ($places as $key => $place) 
             {
             $idPlace = $place->id;
+            $namePlace = $place->name;
             }
 
             
@@ -71,13 +72,15 @@ class Controller_Valuations extends Controller_Rest
             $valuations->id_place = $idPlace ;
             $valuations->id_users = $dataJwtUser->id;
             $valuations->date = date('d-m-Y/h:i:s');
+            $valuations->place = $namePlace ;
+            $valuations->user = $dataJwtUser->name;
             
 
            
             
             
             
-            if ($valuations->value == "" || $valuations->id_place == "" )
+            if ($valuations->value == "" || $valuations->id_place == "" ||  $valuations->id_users == "" || $valuations->date == "" || $valuations->place == "" || $valuations->user == ""   )
             {
                 $json = $this->response(array(
                     'code' => 400,
@@ -102,7 +105,7 @@ class Controller_Valuations extends Controller_Rest
 
                 $json = $this->response(array(
                     'code' => 200,
-                    'message' => 'Lugar creado correctamente',
+                    'message' => 'Valoracion creada correctamente',
                     'data' => $valuations
                 ));
 
@@ -175,7 +178,10 @@ class Controller_Valuations extends Controller_Rest
         foreach ($places as $key => $place) 
         {
             $idPlace = $place->id;
+        
         }
+        
+    
        
 
 
@@ -201,11 +207,23 @@ class Controller_Valuations extends Controller_Rest
         }
         else
         {
+               
+           
+
+
+
+            //array_push($valuations, "manzana", "arándano");
             $valuationsFormated = [];
             foreach ($valuations as $key => $valuation) 
             {
                 $valuationsFormated[] = $valuation; 
+
+               
+
+
+                 
             }
+            
 
 
             

@@ -7,7 +7,16 @@ class Model_Search extends Orm\Model
     protected static $_primary_key = array('id_user','id_place');
     protected static $_properties = array(
         'id_user',
-        'id_place',// both validation & typing observers will ignore the PK
+        'id_place',
+        'place' => array(
+            'data_type' => 'varchar'   
+        ),
+        'date' => array(
+            'data_type' => 'varchar'   
+        ),
+        'search_count' => array(
+            'data_type' => 'varchar'   
+        ),// both validation & typing observers will ignore the PK
     );
   
    protected static $_has_many = array(

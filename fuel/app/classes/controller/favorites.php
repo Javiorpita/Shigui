@@ -56,6 +56,7 @@ class Controller_Favorites extends Controller_Rest
             foreach ($places as $key => $place) 
             {
             $idPlace = $place->id;
+            $namePlace = $place->name;
             }
 
             
@@ -65,19 +66,19 @@ class Controller_Favorites extends Controller_Rest
 
 
     
-            $valuations = new Model_Valuations();
-            $valuations->value = $input['value'];
-            $valuations->comentary = $input['comentary'];
-            $valuations->id_place = $idPlace ;
-            $valuations->id_users = $dataJwtUser->id;
-            $valuations->date = date('d-m-Y/h:i:s');
+            $favorites = new Model_Favorites();
+            
+            $favorites->place = $namePlace;
+            $favorites->id_place = $idPlace ;
+            $favorites->id_user = $dataJwtUser->id;
+            
             
 
-           
+          
             
             
             
-            if ($valuations->value == "" || $valuations->id_place == "" )
+            if ($favorites->id_user == "" || $favorites->id_place == "" || $favorites->place == "" )
             {
                 $json = $this->response(array(
                     'code' => 400,
@@ -85,25 +86,16 @@ class Controller_Favorites extends Controller_Rest
                     'data' => []
                 ));
             }
-            elseif ($valuations->value < 1 || $valuations->value > 5)
-            {
-                $json = $this->response(array(
-                    'code' => 400,
-                    'message' => 'La valoracion ha de estar entre 1 y 5',
-                    'data' => []
-                ));
-
-            }
             else
             {
 
-                $valuations->save();
+                $favorites->save();
                 
 
                 $json = $this->response(array(
                     'code' => 200,
-                    'message' => 'Lugar creado correctamente',
-                    'data' => $valuations
+                    'message' => 'Lugar enviado a favoritos correctamente',
+                    'data' => $favorites
                 ));
 
                 return $json;

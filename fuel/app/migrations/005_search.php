@@ -10,6 +10,9 @@
                 array(
             'id_user' => array('constraint' => 11, 'type' => 'int'),
             'id_place' => array('constraint' => 11, 'type' => 'int'),
+            'place' => array('constraint' => 100, 'type' => 'varchar'),
+            'date' => array('constraint' => 30, 'type' => 'varchar'),
+            'search_count' => array('constraint' => 11, 'type' => 'int'),
         ), array('id_user','id_place'), false, 'InnoDB', 'utf8_unicode_ci',
         array(
             array(
