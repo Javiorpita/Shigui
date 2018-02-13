@@ -2,7 +2,7 @@
 
 use \Firebase\JWT\JWT;
 
-class Controller_Favorites extends Controller_Rest
+class Controller_Search extends Controller_Rest
 {
     private $key = "juf3dhu3hufdchv3xui3ucxj";
 
@@ -42,7 +42,7 @@ class Controller_Favorites extends Controller_Rest
                 return $json;
                
             }
-            if ( ! isset($_POST['id_maps'])) 
+            if ( ! isset($_POST['id_maps']) ) 
             {
                 $json = $this->response(array(
                     'code' => 400,
@@ -76,19 +76,20 @@ class Controller_Favorites extends Controller_Rest
 
 
     
-            $favorites = new Model_Favorites();
-            
-            $favorites->place = $namePlace;
-            $favorites->id_place = $idPlace ;
-            $favorites->id_user = $dataJwtUser->id;
-            
+            $search = new Model_Search();
+           
+            $search->id_place = $idPlace ;
+            $search->id_user = $dataJwtUser->id;
+            $search->date = date('d-m-Y/h:i:s');
+            $search->place = $namePlace ;
+            $search->search_count = 1;
             
 
-          
+           
             
             
             
-            if ($favorites->id_user == "" || $favorites->id_place == "" || $favorites->place == "" )
+            if ($search->place == "" || $search->id_place == "" ||  $search->id_user == "" )
             {
                 $json = $this->response(array(
                     'code' => 400,
@@ -96,16 +97,17 @@ class Controller_Favorites extends Controller_Rest
                     'data' => []
                 ));
             }
+            
             else
             {
 
-                $favorites->save();
+                $search->save();
                 
 
                 $json = $this->response(array(
                     'code' => 200,
-                    'message' => 'Lugar enviado a favoritos correctamente',
-                    'data' => $favorites
+                    'message' => 'Busqueda hecha correctamente',
+                    'data' => $search
                 ));
 
                 return $json;
@@ -117,14 +119,10 @@ class Controller_Favorites extends Controller_Rest
            
                if($e->getCode() == 23000)
             {
-                $json = $this->response(array(
-                    'code' => 500,
-                    'message' => $e->getMessage(),
-                    'data' => []
-                //'message' => $e->getMessage(),
-                ));
+                $input = $_POST;
 
-                return $json;
+                $this->searchs($input['id_maps']);
+
 
             }
             else
@@ -142,6 +140,8 @@ class Controller_Favorites extends Controller_Rest
             }
 
             
+
+            
         }        
     }
 
@@ -152,8 +152,8 @@ class Controller_Favorites extends Controller_Rest
     
 
 
-    
-    public function get_favorites()
+
+    public function get_search()
     {
 
         try
@@ -190,19 +190,21 @@ class Controller_Favorites extends Controller_Rest
         
 
 
-        $favorites = Model_Favorites::find('all', array(
+        $searchs= Model_Search::find('all', array(
             'where' => array(
                 array('id_user', $dataJwtUser->id),
                 
                
-            )
+            ),
+            'order_by' => array('search_count' => 'desc')
         ));
 
-        if(empty($favorites))
+
+        if(empty($searchs))
         {
             $json = $this->response(array(
                 'code' => 200,
-                'message' => 'No hay favoritos que mostrar',
+                'message' => 'No hay busquedas que mostrar',
                 'data' => ''
 
             ));
@@ -212,18 +214,20 @@ class Controller_Favorites extends Controller_Rest
         }
         else
         {
-            $favoritesFormated = [];
-            foreach ($favorites as $key => $valuation) 
+            $searchFormated = [];
+            foreach ($searchs as $key => $search) 
             {
-                $favoritesFormated[] = $valuation; 
+                $searchFormated[] = $search; 
+
             }
+          
 
 
             
             $json = $this->response(array(
                 'code' => 200,
-                'message' => 'Esta es la lista de favoritos',
-                'data' => $favoritesFormated
+                'message' => 'Esta es la lista de busquedas',
+                'data' => $searchFormated
 
             ));
 
@@ -236,10 +240,8 @@ class Controller_Favorites extends Controller_Rest
 
     }
 
-
-    public function get_favorite()
+    private function searchs($search)
     {
-
         try
             {
                 $headers = apache_request_headers();
@@ -269,60 +271,65 @@ class Controller_Favorites extends Controller_Rest
                 return $json;
                
             }
-       
+             
 
-        $input = $_GET;
-
-
-        $favorites = Model_Favorites::find('all', array(
+            
+            $places = Model_Places::find('all', array(
             'where' => array(
-                array('id_user', $dataJwtUser->id),
-                array('id_place', $input['id']),
+                array('id_maps', $search),
                 
                
-            )
-        ));
+                )
+            )); 
 
-        if(empty($favorites))
-        {
-            $json = $this->response(array(
-                'code' => 200,
-                'message' => 'No hay favoritos que mostrar',
-                'data' => ''
-
-            ));
-
-            return $json;
-
-        }
-        else
-        {
-            $favoritesFormated = [];
-            foreach ($favorites as $key => $valuation) 
+            foreach ($places as $key => $place) 
             {
-                $favoritesFormated[] = $valuation; 
+            $idPlace = $place->id;
+            
             }
 
 
+
+
+
+
+
+
+            $search = Model_Search::find('all', array(
+                'where' => array(
+                
+                    array('id_place', $idPlace), 
+                    array('id_user', $dataJwtUser->id), 
+                
+               
+                )
+             ));
+            foreach ($search as $key => $val) 
+                {
+                $val->search_count = $val->search_count + 1;
+
             
-            $json = $this->response(array(
+                }
+                
+                $val->save();
+
+
+        
+
+
+        
+                $json = $this->response(array(
                 'code' => 200,
-                'message' => 'Esta es el favorito',
-                'data' => $favoritesFormated
+                'message' => 'Este es el lugar',
+                'data' => $search
 
             ));
 
-            return $json;
-
-        }
-
-       
-        //return $this->response(Arr::reindex($users));
-
+        return $json;
     }
-    /*    function decodeToken()
-    {
 
+
+   /*
         $jwt = apache_request_headers()['Authorization'];
         $token = JWT::decode($jwt, $this->key , array('HS256'));
         return $token;
@@ -374,102 +381,8 @@ class Controller_Favorites extends Controller_Rest
 
 
 
-    public function post_delete()
-    {
-        
-        try
-        {
-            $headers = apache_request_headers();
-            $token = $headers['Authorization'];
-            $dataJwtUser = JWT::decode($token, $this->key, array('HS256'));
-
-    
-  
-
-            $users = Model_Users::find('all', array(
-                'where' => array(
-                    array('name', $dataJwtUser->name),
-                    array('password', $dataJwtUser->password)
-                )
-             ));
-
-        }    
-        catch (Exception $e)
-        {
-            $json = $this->response(array(
-                'code' => 500,
-                'message' => $e->getMessage(),
-                'data' => []
-            ));
-            return $json;
-           
-        }
-
-        $input = $_POST;
-
-        
-        
 
 
-
-        
-
-       
-
-        
-
-
-        $favorites = Model_Favorites::find('all', array(
-            'where' => array(
-                array('id_user', $dataJwtUser->id),
-                array('id_place', $input['id']), 
-                
-               
-            )
-        ));
-
-
-
-
-
-
-
-        foreach ($favorites as $key => $valuation) 
-        {
-            $modelFavorites = $valuation;
-        }
-
-
-
-        
-
-
-
-       
-
-
-        try
-        {
-           $modelFavorites->delete(); 
-        }
-        catch (Exception $e)
-        {
-
-        }
-
-
-        
-        
-
-        $json = $this->response(array(
-            'code' => 200,
-            'message' => 'Favorito borrado',
-            'data' => ''
-        ));
-
-            return $json;
-    }
-    /*    
 
     
 

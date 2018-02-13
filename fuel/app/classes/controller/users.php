@@ -471,7 +471,8 @@ class Controller_Users extends Controller_Rest
             foreach(Upload::get_files() as $file)
             {
                 $user = Model_Users::find($dataJwtUser->id);
-                $user->picture = 'http://' . $_SERVER['SERVER_NAME'] . '/Shigui/public/assets/img/' . $file['saved_as'];
+                //$user->picture = 'http://' . $_SERVER['SERVER_NAME'] . '/Shigui/public/assets/img/' . $file['saved_as'];
+                $user->picture = 'http://' . $_SERVER['SERVER_NAME'] . '/shigui/Shigui/public/assets/img/' . $file['saved_as'];
                 $user->save();
             }
         }

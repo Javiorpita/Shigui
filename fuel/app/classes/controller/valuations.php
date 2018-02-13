@@ -42,6 +42,16 @@ class Controller_Valuations extends Controller_Rest
                 return $json;
                
             }
+            if ( ! isset($_POST['id_maps']) && ! isset($_POST['value']) && ! isset($_POST['comentary'])) 
+            {
+                $json = $this->response(array(
+                    'code' => 400,
+                    'message' => 'Error en las credenciales, prueba otra vez',
+                    'data' => []
+                ));
+
+                return $json;
+            }
              
 
             $input = $_POST;
@@ -267,23 +277,26 @@ class Controller_Valuations extends Controller_Rest
                
             )
         )); 
+        
 
-        foreach ($places as $key => $place) 
-        {
+            foreach ($places as $key => $place) 
+            {
             $idPlace = $place->id;
-        }
+            }
 
        
 
 
 
-        $valuations = Model_Valuations::find('all', array(
-            'where' => array(
-                array('id_place', $idPlace),
+            $valuations = Model_Valuations::find('all', array(
+                'where' => array(
+                    array('id_place', $idPlace),
                 
                
-            )
-        ));
+                )
+            ));
+        
+        
 
         
         $rising = 0;
@@ -304,6 +317,10 @@ class Controller_Valuations extends Controller_Rest
 
             $divide += 1;
             
+        }
+        if ($divide == 0)
+        {
+            $divide = 1;
         }
 
         $rising /= $divide;
@@ -423,35 +440,32 @@ class Controller_Valuations extends Controller_Rest
     {
         
         try
-            {
-                $headers = apache_request_headers();
-                $token = $headers['Authorization'];
-                $dataJwtUser = JWT::decode($token, $this->key, array('HS256'));
+        {
+            $headers = apache_request_headers();
+            $token = $headers['Authorization'];
+            $dataJwtUser = JWT::decode($token, $this->key, array('HS256'));
 
-        
-      
+    
+  
 
-                $users = Model_Users::find('all', array(
-                    'where' => array(
-                        array('id', $dataJwtUser->id),
-                        array('name', $dataJwtUser->name),
-                        array('password', $dataJwtUser->password)
-               
-                    )
-                 ));
+            $users = Model_Users::find('all', array(
+                'where' => array(
+                    array('name', $dataJwtUser->name),
+                    array('password', $dataJwtUser->password)
+                )
+             ));
 
-            }    
-            catch (Exception $e)
-            {
-                $json = $this->response(array(
-                    'code' => 500,
-                    'message' => $e->getMessage(),
-                    'data' => []
-                ));
-                return $json;
-               
-            }
-
+        }    
+        catch (Exception $e)
+        {
+            $json = $this->response(array(
+                'code' => 500,
+                'message' => $e->getMessage(),
+                'data' => []
+            ));
+            return $json;
+           
+        }
 
         $input = $_POST;
 
@@ -476,7 +490,7 @@ class Controller_Valuations extends Controller_Rest
         if( empty($places)) 
         {
             $json = $this->response(array(
-                    'code' => 500,
+                    'code' => 400,
                     'message' => 'id no encontrado',
                     'data' => []
                 ));
@@ -505,18 +519,40 @@ class Controller_Valuations extends Controller_Rest
             )
         ));
 
+
+
+
+
         foreach ($valuations as $key => $valuation) 
         {
             $modelValuation = $valuation;
         }
 
+        
+
+
+
+       
+
+
+        Model_Valuations::find($modelValuation);
+
+
+        try
+        {
+           $modelValuation->delete(); 
+        }
+        catch (Exception $e)
+        {
+
+        }
 
         
-        $modelValuation->delete();
+        
 
         $json = $this->response(array(
             'code' => 200,
-            'message' => 'Usuario borrado',
+            'message' => 'Valoracion borrada',
             'data' => ''
         ));
 

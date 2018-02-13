@@ -2,7 +2,7 @@
 
 class Model_Search extends Orm\Model
 {
-    protected static $_table_name = 'find';
+    protected static $_table_name = 'search';
 
     protected static $_primary_key = array('id_user','id_place');
     protected static $_properties = array(
@@ -15,7 +15,7 @@ class Model_Search extends Orm\Model
             'data_type' => 'varchar'   
         ),
         'search_count' => array(
-            'data_type' => 'varchar'   
+            'data_type' => 'int'   
         ),// both validation & typing observers will ignore the PK
     );
   
