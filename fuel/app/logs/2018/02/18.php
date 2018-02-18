@@ -1,0 +1,40 @@
+<?php defined('COREPATH') or exit('No direct script access allowed'); ?>
+
+WARNING - 2018-02-18 09:46:47 --> Fuel\Core\Fuel::init - The configured locale en_US is not installed on your system.
+WARNING - 2018-02-18 09:47:53 --> Fuel\Core\Fuel::init - The configured locale en_US is not installed on your system.
+WARNING - 2018-02-18 09:48:06 --> Fuel\Core\Fuel::init - The configured locale en_US is not installed on your system.
+WARNING - 2018-02-18 09:48:48 --> Fuel\Core\Fuel::init - The configured locale en_US is not installed on your system.
+WARNING - 2018-02-18 09:50:24 --> Fuel\Core\Fuel::init - The configured locale en_US is not installed on your system.
+WARNING - 2018-02-18 09:51:00 --> Fuel\Core\Fuel::init - The configured locale en_US is not installed on your system.
+WARNING - 2018-02-18 09:51:23 --> Fuel\Core\Fuel::init - The configured locale en_US is not installed on your system.
+ERROR - 2018-02-18 09:51:23 --> Error - syntax error, unexpected 'if' (T_IF) in /var/www/html/ShiguiJavier/fuel/app/classes/controller/valuations.php on line 103
+WARNING - 2018-02-18 09:52:30 --> Fuel\Core\Fuel::init - The configured locale en_US is not installed on your system.
+ERROR - 2018-02-18 09:52:30 --> Error - syntax error, unexpected 'if' (T_IF) in /var/www/html/ShiguiJavier/fuel/app/classes/controller/valuations.php on line 102
+WARNING - 2018-02-18 09:53:13 --> Fuel\Core\Fuel::init - The configured locale en_US is not installed on your system.
+ERROR - 2018-02-18 09:53:13 --> Error - syntax error, unexpected 'if' (T_IF) in /var/www/html/ShiguiJavier/fuel/app/classes/controller/valuations.php on line 102
+WARNING - 2018-02-18 09:55:07 --> Fuel\Core\Fuel::init - The configured locale en_US is not installed on your system.
+WARNING - 2018-02-18 09:57:51 --> Fuel\Core\Fuel::init - The configured locale en_US is not installed on your system.
+WARNING - 2018-02-18 09:58:03 --> Fuel\Core\Fuel::init - The configured locale en_US is not installed on your system.
+WARNING - 2018-02-18 10:00:54 --> Fuel\Core\Fuel::init - The configured locale en_US is not installed on your system.
+WARNING - 2018-02-18 10:00:57 --> Fuel\Core\Fuel::init - The configured locale en_US is not installed on your system.
+WARNING - 2018-02-18 10:01:45 --> Fuel\Core\Fuel::init - The configured locale en_US is not installed on your system.
+WARNING - 2018-02-18 10:03:27 --> Fuel\Core\Fuel::init - The configured locale en_US is not installed on your system.
+WARNING - 2018-02-18 10:05:21 --> Fuel\Core\Fuel::init - The configured locale en_US is not installed on your system.
+WARNING - 2018-02-18 10:12:09 --> Fuel\Core\Fuel::init - The configured locale en_US is not installed on your system.
+WARNING - 2018-02-18 10:16:39 --> Fuel\Core\Fuel::init - The configured locale en_US is not installed on your system.
+WARNING - 2018-02-18 10:18:41 --> Fuel\Core\Fuel::init - The configured locale en_US is not installed on your system.
+WARNING - 2018-02-18 10:18:58 --> Fuel\Core\Fuel::init - The configured locale en_US is not installed on your system.
+WARNING - 2018-02-18 10:20:07 --> Fuel\Core\Fuel::init - The configured locale en_US is not installed on your system.
+WARNING - 2018-02-18 10:20:37 --> Fuel\Core\Fuel::init - The configured locale en_US is not installed on your system.
+WARNING - 2018-02-18 10:20:52 --> Fuel\Core\Fuel::init - The configured locale en_US is not installed on your system.
+WARNING - 2018-02-18 10:21:11 --> Fuel\Core\Fuel::init - The configured locale en_US is not installed on your system.
+ERROR - 2018-02-18 10:21:11 --> Notice - Undefined variable: idPlace in /var/www/html/ShiguiJavier/fuel/app/classes/controller/valuations.php on line 209
+WARNING - 2018-02-18 10:21:16 --> Fuel\Core\Fuel::init - The configured locale en_US is not installed on your system.
+WARNING - 2018-02-18 10:21:42 --> Fuel\Core\Fuel::init - The configured locale en_US is not installed on your system.
+WARNING - 2018-02-18 10:22:13 --> Fuel\Core\Fuel::init - The configured locale en_US is not installed on your system.
+WARNING - 2018-02-18 10:22:26 --> Fuel\Core\Fuel::init - The configured locale en_US is not installed on your system.
+WARNING - 2018-02-18 10:22:45 --> Fuel\Core\Fuel::init - The configured locale en_US is not installed on your system.
+WARNING - 2018-02-18 10:23:39 --> Fuel\Core\Fuel::init - The configured locale en_US is not installed on your system.
+WARNING - 2018-02-18 10:23:50 --> Fuel\Core\Fuel::init - The configured locale en_US is not installed on your system.
+WARNING - 2018-02-18 10:23:57 --> Fuel\Core\Fuel::init - The configured locale en_US is not installed on your system.
+WARNING - 2018-02-18 10:26:07 --> Fuel\Core\Fuel::init - The configured locale en_US is not installed on your system.

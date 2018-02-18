@@ -474,6 +474,9 @@ class Controller_Users extends Controller_Rest
                 //$user->picture = 'http://' . $_SERVER['SERVER_NAME'] . '/Shigui/public/assets/img/' . $file['saved_as'];
                 $user->picture = 'http://' . $_SERVER['SERVER_NAME'] . '/shigui/Shigui/public/assets/img/' . $file['saved_as'];
                 $user->save();
+                $this->updatePhoto($user->picture);
+                
+
             }
         }
 
@@ -506,6 +509,65 @@ class Controller_Users extends Controller_Rest
     }
 
 }
+    private function updatePhoto($photo)
+    {
+        try
+            {
+                $headers = apache_request_headers();
+                $token = $headers['Authorization'];
+                $dataJwtUser = JWT::decode($token, $this->key, array('HS256'));
+
+        
+      
+
+                $users = Model_Users::find('all', array(
+                    'where' => array(
+                        array('id', $dataJwtUser->id),
+                        array('name', $dataJwtUser->name),
+                        array('password', $dataJwtUser->password)
+               
+                    )
+                 ));
+
+            }    
+            catch (Exception $e)
+            {
+                $json = $this->response(array(
+                    'code' => 500,
+                    'message' => $e->getMessage(),
+                    'data' => []
+                ));
+                return $json;
+               
+            }
+       
+
+        
+
+
+        $valuations = Model_Valuations::find('all', array(
+            'where' => array(
+                array('id_users', $dataJwtUser->id),
+                
+               
+            )
+        ));
+
+        
+            
+            foreach ($valuations as $key => $valuation) 
+            {
+                $valuation->user_picture = $photo;
+                $valuation->save();
+
+                
+            }
+
+
+            
+           
+    }
+
 /*
         function decodeToken()
     {

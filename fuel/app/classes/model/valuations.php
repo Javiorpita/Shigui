@@ -23,6 +23,10 @@ class Model_Valuations extends Orm\Model
         'place' => array(
             'data_type' => 'varchar'   
         ),
+        'user_picture' => array(
+            'data_type' => 'varchar'   
+        ),
+
       
     );
   protected static $_has_many = array(

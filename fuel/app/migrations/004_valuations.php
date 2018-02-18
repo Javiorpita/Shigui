@@ -15,6 +15,7 @@ class valuations
         'id_place' => array('constraint' => 11, 'type' => 'int'),
         'user' => array('constraint' => 100, 'type' => 'varchar'),
         'place' => array('constraint' => 100, 'type' => 'varchar'),
+        'user_picture' => array('constraint' => 100, 'type' => 'varchar'),
     ), array('id_users','id_place'), false, 'InnoDB', 'utf8_unicode_ci',
     array(
         array(

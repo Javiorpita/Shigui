@@ -30,6 +30,12 @@ class Controller_Valuations extends Controller_Rest
                
                     )
                  ));
+                foreach ($users as $key => $user) 
+                {
+                  
+                    $picture= $user->picture;
+                }
+                
 
             }    
             catch (Exception $e)
@@ -42,6 +48,8 @@ class Controller_Valuations extends Controller_Rest
                 return $json;
                
             }
+
+
             if ( ! isset($_POST['id_maps']) && ! isset($_POST['value']) && ! isset($_POST['comentary'])) 
             {
                 $json = $this->response(array(
@@ -84,6 +92,7 @@ class Controller_Valuations extends Controller_Rest
             $valuations->date = date('d-m-Y/h:i:s');
             $valuations->place = $namePlace ;
             $valuations->user = $dataJwtUser->name;
+            $valuations->user_picture = $picture;
             
 
            
