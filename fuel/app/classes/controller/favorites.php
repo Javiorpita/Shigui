@@ -273,7 +273,6 @@ class Controller_Favorites extends Controller_Rest
 
         $input = $_GET;
 
-
         $favorites = Model_Favorites::find('all', array(
             'where' => array(
                 array('id_user', $dataJwtUser->id),

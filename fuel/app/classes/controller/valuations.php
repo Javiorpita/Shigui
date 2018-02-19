@@ -30,11 +30,18 @@ class Controller_Valuations extends Controller_Rest
                
                     )
                  ));
+                
+
                 foreach ($users as $key => $user) 
                 {
-                  
-                    $picture= $user->picture;
+
+
+                    $picture = $user->picture;
+                    
+                   
+                    
                 }
+                 
                 
 
             }    
@@ -92,6 +99,7 @@ class Controller_Valuations extends Controller_Rest
             $valuations->date = date('d-m-Y/h:i:s');
             $valuations->place = $namePlace ;
             $valuations->user = $dataJwtUser->name;
+
             $valuations->user_picture = $picture;
             
 
@@ -106,6 +114,7 @@ class Controller_Valuations extends Controller_Rest
                     'message' => 'Se necesita introducir todos los parametros',
                     'data' => []
                 ));
+                return $json;
             }
             elseif ($valuations->value < 1 || $valuations->value > 5)
             {
@@ -116,6 +125,16 @@ class Controller_Valuations extends Controller_Rest
                 ));
 
             }
+            elseif (strlen($valuations->comentary) > 180)
+            {
+                $json = $this->response(array(
+                    'code' => 400,
+                    'message' => 'Numero de caracteres excedido',
+                    'data' => []
+                ));
+                return $json;
+            }
+
             else
             {
 

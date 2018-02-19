@@ -7,10 +7,10 @@ return array(
 	'default' => array(
 		'connection'  => array(
 			'dsn'        => 'mysql:host=localhost;dbname=shigui',
-		//	'username'   => 'shigui',
-		//	'password'   => 'gJfBZzlxC9Ju0OMJ',
-			'username'   => 'alumnos',
-			'password'   => 'cev',
+			'username'   => 'shigui',
+			'password'   => 'z5smiRu5LXtf9f2L',
+			//'username'   => 'alumnos',
+			//'password'   => 'cev',
 		),
 	),
 );
