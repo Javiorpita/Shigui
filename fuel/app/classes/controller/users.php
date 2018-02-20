@@ -400,18 +400,15 @@ class Controller_Users extends Controller_Rest
                             )
             ));
 
-                    if($users != null){
-                        $json = $this->response(array(
-                            'code' => 500,
-                            'message' => 'Ya existe un usuario con ese nombre',
-                            'data' => []
-                        //'message' => $e->getMessage(),
-                        ));
-
-                        return $json;
-                    }
+                   
 
                     $user = Model_Users::find($dataJwtUser->id);
+                    $user->name = '';
+                    $user->email = '';
+                    
+                    
+               
+                    $user->save();
                     $user->name = $input['name'];
                     $user->email = $input['email'];
                     
