@@ -382,7 +382,7 @@ class Controller_Users extends Controller_Rest
                     $dataJwtUser = JWT::decode($token, $this->key, array('HS256'));
                 }
 
-            if (empty($_POST['name'])) 
+            if (empty($_POST['name'])|| empty($_POST['email'])) 
                 {
                     $json = $this->response(array(
                         'code' => 400,
@@ -413,6 +413,7 @@ class Controller_Users extends Controller_Rest
 
                     $user = Model_Users::find($dataJwtUser->id);
                     $user->name = $input['name'];
+                    $user->email = $input['email'];
                     
                     
                
